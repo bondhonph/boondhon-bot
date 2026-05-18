@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const axios = require('axios'); // স্টেবিলিটির জন্য axios ব্যবহার করা হয়েছে, যা 'fetch is not defined' এরর দূর করবে
+const axios = require('axios');
 const app = express();
 app.use(express.json());
 
@@ -13,7 +13,7 @@ const AFFORDABLE_IDS = [
   "1J9_qfkIdIWL5Sc9O8EokvYlGfQWrf5TD","1cOCFSa1ap-Z54Ldf2AuoUKlEaQ5Ccql-",
   "1dbYH2L4QykEUhYXGQPzQZObEuHFdwKsT","1HJTtR-zhhg6v2ph7MikdMDWI-LWJgG0z",
   "1PRlMp4F1xnQJPURON535pl7t08_thXVA","1UEAeYYB3Bt5vMYEL-a7AcV1aV21Z04si",
-  "1-_qTV4g0oKMdfMRxlTZL3yUO98ZGAoi","15yHXRk2mHI6-cKeooRqT20XeHubRRrPN",
+  "1-_qTV4gq0oKMdfMRxlTZL3yUO98ZGAoi","15yHXRk2mHI6-cKeooRqT20XeHubRRrPN",
   "1Yrcqj5g0sZDrL3QaEkfEmKnF12BEs6ir","1vXwJ68j7x5qfpZdHkMkqLn0tvpblGDpl",
   "1GWw91oefwyYr9sHSQXjePTSX-KwPjy7I","1_tnTz7HWDf4CVJHORPlani7pjEcLdm7X",
   "1OMy_r94N_iUqvPW1t5fAGa4Sv3C_MIqF","1rXCxMziCgTImURvkahNp-AvneVljg-CW",
@@ -97,11 +97,14 @@ const PREMIUM_IDS = [
 ];
 
 // ── Helpers ────────────────────────────────────────────────
-function randomId(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
 function driveUrl(id) {
   return `https://drive.google.com/uc?export=view&id=${id}`;
+}
+
+// ৩টি আলাদা আলাদা ইউনিক ইমেজ আইডি নেওয়ার জন্য ফাংশন
+function getRandomImages(arr, count = 3) {
+  let shuffled = [...arr].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 }
 
 // ── Conversation memory ────────────────────────────────────
@@ -154,22 +157,17 @@ const SYSTEM_PROMPT = `তুমি BOONDHON Printing House-এর AI Sales Agen
 1. SOCIAL PROOF — গত সপ্তাহে ৩টা wedding-এ আমাদের Premium কার্ড গেছে — সবাই অবাক হয়ে গেছেন! 😊
 2. SCARCITY / URGENCY — এই মাসে slot প্রায় ভরে গেছে — আরেকটু দেরি করলে date নাও পেতে পারেন 😅
 3. LOSS AVERSION — ১০০ পিসে FREE নিকাহনামা — এটা অন্য কোথাও পাবেন না।
-4. VALUE STORYTELLING — বিয়ের কার্ড মানুষ সারাজীবন সংরক্ষণ করে। সেটা সুন্দর হলে মেহমানরা মনে রাখে।
-5. MICRO-COMMITMENT — বিয়েটা কি এ বছরের মধ্যে? 😊 → কতজন মেহমান আসছেন?
-6. EMPATHY FIRST — বাজেট টাইট, বুঝলাম! কিন্তু আমাদের Affordable কার্ড দেখলে অবাক হবেন — quality অসাধারণ।
-7. ANCHOR PRICING — Premium ৯,০০০ টাকা হলে Affordable মাত্র ৭,০০০ — প্রায় ২,০০০ টাকা বাঁচছেন!
+4. VALUE STORYTELLING — বিয়ের কার্ড সুন্দর হলে মেহমানরা মনে রাখে।
+5. MICRO-COMMITMENT — কতজন মেহমান আসছেন? 😊
+6. EMPATHY FIRST — বাজেট টাইট হলেও আমাদের Affordable কার্ডের quality অসাধারণ।
+7. ANCHOR PRICING — Premium-এর সাথে Affordable-এর তুলনা করে সাশ্রয়ের দিকটি তুলে ধরো।
 
 ━━━━━ PRICE LIST (সঠিক) ━━━━━
-৫০ পিস:  Affordable=২,৭েনার ৳ | Premium=৩,২৫০ ৳
+৫০ পিস:  Affordable=২,৭৫০ ৳ | Premium=৩,২৫০ ৳
 ১০০ পিস: Affordable=৪,৫০০ ৳ | Premium=৫,৫০০ ৳ (FREE নিকাহনামা 🎁)
 ২০০ পিস: Affordable=৭,০০০ ৳ | Premium=৯,০০০ ৳ (FREE নিকাহনামা 🎁)
 Advance মাত্র ৩০% → bKash/Nagad: 01682588856
-Delivery: ৫-৭ কার্যদিবস, সারা বাংলাদেশ Cash on Delivery
-
-━━━━━ CARD TYPE TRIGGER ━━━━━
-Customer "Affordable" বললে → reply-এ বলো: "এই মুহূর্তে আপনাকে একটি নমুনা পাঠাচ্ছি 💚"
-Customer "Premium" বললে → reply-এ বলো: "এই মুহূর্তে আপনাকে একটি নমুনা পাঠাচ্ছি ✨"
-Order confirm হলে → warmly congratulate করো এবং বলো টিম contact করবে`;
+Delivery: ৫-৭ কার্যদিবস, সারা বাংলাদেশ Cash on Delivery`;
 
 // ── Groq AI call (Axios Optimized) ─────────────────────────
 async function getAIReply(senderId, userMessage) {
@@ -223,8 +221,8 @@ async function sendText(recipientId, text) {
   });
 }
 
-// মেসেঞ্জারে সুন্দর সিঙ্গেল বা মাল্টিপল কার্ড (Carousel Layout) দেখানোর জন্য ফিক্সড ফাংশন
-async function sendCarouselCard(recipientId, title, subtitle, imageUrl, buttons = []) {
+// একাধিক ছবি একসাথে ক্যারোজেল/স্লাইডার আকারে পাঠানোর ফিক্সড ফাংশন
+async function sendCarousel(recipientId, elements) {
   await sendToMeta({
     recipient: { id: recipientId },
     messaging_type: "RESPONSE",
@@ -233,16 +231,7 @@ async function sendCarouselCard(recipientId, title, subtitle, imageUrl, buttons 
         type: 'template',
         payload: {
           template_type: 'generic',
-          elements: [{
-            title: title,
-            image_url: imageUrl,
-            subtitle: subtitle,
-            buttons: buttons.map(b => ({
-              type: 'postback',
-              title: b.title,
-              payload: b.payload
-            }))
-          }]
+          elements: elements
         }
       }
     }
@@ -289,7 +278,6 @@ app.post('/webhook', async (req, res) => {
 
     const senderId = event.sender.id;
     
-    // টেক্সট মেসেজ অথবা বাটন পোস্টব্যাক চেক
     let userText = "";
     if (event.message && event.message.text) {
       userText = event.message.text;
@@ -314,41 +302,44 @@ app.post('/webhook', async (req, res) => {
         continue;
       }
 
-      // trigger detect
       const trigger = detectTrigger(userText);
-
-      // AI reply জেনারেট করা
       const aiReply = await getAIReply(senderId, userText);
       addToHistory(senderId, 'user', userText);
       addToHistory(senderId, 'assistant', aiReply);
 
-      // ১. যদি ইউজার এফোর্ডেবল কার্ড দেখতে চায়
+      // ১. যদি ইউজার এফোর্ডেবল কার্ড দেখতে চায় (একসাথে ৩টি ভিন্ন ছবি ক্যারোজেলে যাবে)
       if (trigger === 'affordable') {
-        const imgUrl = driveUrl(randomId(AFFORDABLE_IDS));
-        await sendCarouselCard(
-          senderId, 
-          "💚 Affordable Card Collection", 
-          aiReply, // AI এর সেলস টক আলাদা বাবল না পাঠিয়ে কার্ডের ভেতরে দেওয়া হলো
-          imgUrl,
-          [
-            { title: "Premium ও দেখি ✨", payload: "PREMIUM_CARD" },
-            { title: "অর্ডার কনফার্ম করব 💍", payload: "ORDER_CONFIRM" }
+        await sendText(senderId, aiReply); // এআই এর মিষ্টি সেলস টক আগে যাবে
+        
+        const images = getRandomImages(AFFORDABLE_IDS, 3);
+        const elements = images.map((imgId, index) => ({
+          title: `Affordable Design - Option ${index + 1} 💚`,
+          image_url: driveUrl(imgId),
+          subtitle: "সাশ্রয়ী বাজেটে প্রিমিয়াম কোয়ালিটি ফিনিশিং।",
+          buttons: [
+            { type: 'postback', title: "অর্ডার কনফার্ম করব 💍", payload: "ORDER_CONFIRM" },
+            { type: 'postback', title: "Premium কার্ড দেখান ✨", payload: "PREMIUM_CARD" }
           ]
-        );
+        }));
+        
+        await sendCarousel(senderId, elements);
       
-      // ২. যদি ইউজার প্রিমিয়াম কার্ড দেখতে চায়
+      // ২. যদি ইউজার প্রিমিয়াম কার্ড দেখতে চায় (একসাথে ৩টি ভিন্ন ছবি ক্যারোজেলে যাবে)
       } else if (trigger === 'premium') {
-        const imgUrl = driveUrl(randomId(PREMIUM_IDS));
-        await sendCarouselCard(
-          senderId, 
-          "✨ Premium Card Collection", 
-          aiReply, 
-          imgUrl,
-          [
-            { title: "Affordable ও দেখি 💚", payload: "AFFORDABLE_CARD" },
-            { title: "অর্ডার কনফার্ম করব 💍", payload: "ORDER_CONFIRM" }
+        await sendText(senderId, aiReply);
+        
+        const images = getRandomImages(PREMIUM_IDS, 3);
+        const elements = images.map((imgId, index) => ({
+          title: `Premium Design - Option ${index + 1} ✨`,
+          image_url: driveUrl(imgId),
+          subtitle: "অভিজাত লাক্সারি লুক এবং এক্সক্লুসিভ ডিজাইন।",
+          buttons: [
+            { type: 'postback', title: "অর্ডার কনফার্ম করব 💍", payload: "ORDER_CONFIRM" },
+            { type: 'postback', title: "Affordable কার্ড দেখান 💚", payload: "AFFORDABLE_CARD" }
           ]
-        );
+        }));
+        
+        await sendCarousel(senderId, elements);
 
       // ৩. যদি অর্ডার কনফার্মেশনের কোনো কথা হয়
       } else if (trigger === 'sale') {
@@ -361,7 +352,7 @@ app.post('/webhook', async (req, res) => {
           'ধন্যবাদ BOONDHON বেছে নেওয়ার জন্য! 🌸'
         );
       
-      // ৪. নরমাল কোনো কথাবার্তা হলে শুধু এআই টেক্সট যাবে
+      // ৪. নরমাল কথাবার্তা হলে শুধু টেক্সট যাবে
       } else {
         await sendText(senderId, aiReply);
       }
@@ -375,4 +366,4 @@ app.post('/webhook', async (req, res) => {
 app.get('/', (req, res) => res.send('🤖 BOONDHON Bot Running!'));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('✅ BOONDHON Bot Server Started on port ' + PORT));
+app.listen(PORT, () => console.log('¼ BOONDHON Bot Server Started on port ' + PORT));
