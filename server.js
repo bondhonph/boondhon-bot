@@ -156,7 +156,7 @@ function detectTrigger(text) {
   
   const affordable = ["affordable", "অ্যাফোর্ডেবল", "সাশ্রয়", "কম দাম", "affordable card", "affodable", "এফোর্ডেবল", "affordable কালেকশন"];
   const premium = ["premium", "প্রিমিয়াম", "premium card", "প্রিমিয়াম কার্ড", "premium কালেকশন"];
-  const price = ["দাম", "প্রাইস", "price", "অফার", "দাম ও অফার"];
+  const price = ["দাম", "প্রাইস", "price", "অফার", "দাম ও অফার", "eita koto tk", "koto tk", "কত টাকা", "কত"];
   const delivery = ["ডেলিভারি", "কারখানা", "delivery", "অফিস", "ঠিকানা"];
   const selectBangla = ["বাংলা", "bangla", "বাংলা ফর্ম"];
   const selectEnglish = ["english", "ইংরেজি", "english form"];
@@ -168,7 +168,7 @@ function detectTrigger(text) {
     "বাজেটে নাই", "বাজেট নাই", "ডিসকাউন্ট দেন", "ছাড় দেন", "বেশি দাম", "কম নাই"
   ];
   
-  const sale = ["অর্ডার কনফার্ম", "order confirm", "কনফার্ম করলাম", "নিব", "নেব", "অর্ডার করব", "অর্ডার দিতে চাই", "কনফার্ম"];
+  const sale = ["অর্ডার কনফার্ম", "order confirm", "কনফার্ম করলাম", "নিব", "নেব", "অর্ডার করব", "অর্ডার দিতে চাই", "কনফার্ম", "order krbo kivsbe", "order kivabe"];
 
   if (sale.some(w => t.includes(w))) return "sale";
   if (priceObjection.some(w => t.includes(w))) return "price_objection";
@@ -185,48 +185,52 @@ function detectTrigger(text) {
 
 // ── Messenger PURE VERTICAL Buttons ────────────────────────
 async function sendVerticalMainMenu(recipientId, mainText) {
-  await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      recipient: { id: recipientId },
-      message: {
-        attachment: {
-          type: "template",
-          payload: {
-            template_type: "button",
-            text: mainText,
-            buttons: [
-              { type: "postback", title: "🌸 Affordable কালেকশন", payload: "affordable" },
-              { type: "postback", title: "✨ Premium কালেকশন", payload: "premium" },
-              { type: "postback", title: "💰 দাম ও স্পেশাল অফার", payload: "price" }
-            ]
+  try {
+    await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipient: { id: recipientId },
+        message: {
+          attachment: {
+            type: "template",
+            payload: {
+              template_type: "button",
+              text: mainText,
+              buttons: [
+                { type: "postback", title: "🌸 Affordable কালেকশন", payload: "affordable" },
+                { type: "postback", title: "✨ Premium কালেকশন", payload: "premium" },
+                { type: "postback", title: "💰 দাম ও স্পেশাল অফার", payload: "price" }
+              ]
+            }
           }
         }
-      }
-    })
-  });
+      })
+    });
 
-  await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      recipient: { id: recipientId },
-      message: {
-        attachment: {
-          type: "template",
-          payload: {
-            template_type: "button",
-            text: "🚚 আমাদের পলিসি ও অর্ডার লিংক নিচে দেখুন: 👇",
-            buttons: [
-              { type: "postback", title: "🏢 কারখানা ও ডেলিভারি", payload: "delivery" },
-              { type: "postback", title: "🛍️ এখনই অর্ডার করুন", payload: "sale" }
-            ]
+    await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipient: { id: recipientId },
+        message: {
+          attachment: {
+            type: "template",
+            payload: {
+              template_type: "button",
+              text: "🚚 আমাদের পলিসি ও অর্ডার লিংক নিচে দেখুন: 👇",
+              buttons: [
+                { type: "postback", title: "🏢 কারখানা ও ডেলিভারি", payload: "delivery" },
+                { type: "postback", title: "🛍️ এখনই অর্ডার করুন", payload: "sale" }
+              ]
+            }
           }
         }
-      }
-    })
-  });
+      })
+    });
+  } catch (err) {
+    console.error('Error sending vertical menu:', err);
+  }
 }
 
 // ── Controlled Image Sender (Interruptible) ─────────────────
@@ -242,14 +246,18 @@ async function sendImagesStream(senderId, startIndex = 0) {
       return; 
     }
 
-    await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        recipient: { id: senderId },
-        message: { attachment: { type: 'image', payload: { url: driveUrl(ids[i]), is_reusable: true } } }
-      })
-    });
+    try {
+      await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipient: { id: senderId },
+          message: { attachment: { type: 'image', payload: { url: driveUrl(ids[i]), is_reusable: true } } }
+        })
+      });
+    } catch (e) {
+      console.error('Error sending image:', e);
+    }
     await new Promise(resolve => setTimeout(resolve, 850)); 
   }
 
@@ -267,19 +275,20 @@ async function getGeminiReply(senderId, userMessage) {
   contents.push({ role: 'user', parts: [{ text: userMessage }] });
 
   const systemInstructionText = 
-    `তুমি BOONDHON Printing House-এর AI Sales Agent "Brishti Apa"।\n` +
-    `━━━━━ বিজনেস গাইডলাইন ━━━━━\n` +
-    `১. টোন: অত্যন্ত মিষ্টি, আন্তরিক ও সেলস ক্লোজিংমুখী। প্রচুর সুন্দর সুন্দর ইমোজি (🌸, ✨, 💰, 🛍️, 🥰) ব্যবহার করবে।\n` +
-    `২. প্রাইস রুলস:\n` +
-    `   - ৫০ পিস: Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n` +
-    `   - ১০০ পিস: Premium = ৫,৫০০ টাকা | Affordable = ৪,৫০০ টাকা\n` +
-    `   - ২০০ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n` +
-    `   - অফার: কেবল ২০০ পিস বা তার বেশি নিলে "FREE আকদনামা" অফার প্রযোজ্য।\n` +
-    `৩. দাম নিয়ে আপত্তি হ্যান্ডেলিং (সাইকোলজিক্যাল ডিফেন্স):\n` +
-    `   - কাস্টমার প্রথমবার দাম বেশি বললে সহজে দাম কমাবে না। বলবে যে আমাদের মেটেরিয়াল ও ফয়েল প্রিন্টিং কোয়ালিটি বাজারের সাধারণ কার্ডের চেয়ে অনেক প্রিমিয়াম, তাই লাইফটাইম মেমোরি হিসেবে এটা সেরা ডিল।\n` +
-    `   - যদি তারা ১০০ পিস বা তার কম নিতে চায়, তবে অফার পুশ করবে যে ২০০ পিস নিলে ১,০০০ টাকা মূল্যের একটি আকদনামা একদম ফ্রি পাওয়া যাবে, যাতে আদতে লাভ কাস্টমারের বেশি।\n` +
-    `   - নিজে থেকে কখনো ৫ টাকা ডিসকাউন্টের কথা বলবে না, যদি না সিস্টেম তোমাকে আলাদা ডিরেকশন দেয়।\n` +
-    `৪. ২০ পিসের সিক্রেট রুল: নিজে থেকে কখনো ২০ পিসের কথা বলবে না। কেউ খুব জোর করলে কেবল বলবে: "২০ পিস = ১,৫০০ টাকা।"`;
+    "তুমি BOONDHON Printing House-এর AI Sales Agent 'Brishti Apa'।\n" +
+    "━━━━━ বিজনেস গাইডলাইন ━━━━━\n" +
+    "১. টোন: অত্যন্ত মিষ্টি, আন্তরিক ও সেলস ক্লোজিংমুখী। প্রচুর সুন্দর সুন্দর ইমোজি (🌸, ✨, 💰, 🛍️, 🥰) ব্যবহার করবে।\n" +
+    "২. প্রাইস রুলস:\n" +
+    "   - ৫০ পিস: Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n" +
+    "   - ১০০ পিস: Premium = ৫,৫০০ tobacco | Affordable = ৪,৫০০ টাকা\n" +
+    "   - ২০০ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n" +
+    "   - অফার: কেবল ২০০ পিস বা তার বেশি নিলে 'FREE আকদনামা' অফার প্রযোজ্য।\n" +
+    "৩. দাম নিয়ে আপত্তি হ্যান্ডেলিং (সাইকোলজিক্যাল ডিফেন্স):\n" +
+    "   - কাস্টমার প্রথমবার দাম বেশি বললে সহজে দাম কমাবে না। বলবে যে আমাদের মেটেরিয়াল ও ফয়েল প্রিন্টিং কোয়ালিটি বাজারের সাধারণ কার্ডের চেয়ে অনেক প্রিমিয়াম, তাই লাইফটাইম মেমোরি হিসেবে এটা সেরা ডিল।\n" +
+    "   - যদি তারা ১০০ পিস বা তার কম নিতে চায়, তবে অফার পুশ করবে যে ২০০ পিস নিলে ১,০০০ টাকা মূল্যের একটি আকদনামা একদম ফ্রি পাওয়া যাবে, যাতে আদতে লাভ কাস্টমারের বেশি।\n" +
+    "   - নিজে থেকে কখনো ৫ টাকা ডিসকাউন্টের কথা বলবে না, যদি না সিস্টেম তোমাকে আলাদা ডিরেকশন দেয়।\n" +
+    "৪. ২০ পিসের সিক্রেট রুল: নিজে থেকে কখনো ২০ পিসের কথা বলবে না। কেউ খুব জোর করলে কেবল বলবে: '২০ পিস = ১,৫০০ টাকা।'\n" +
+    "৫. কাস্টমার যদি 'Eita koto tk' বা 'Price' অথবা 'order krbo kivsbe' লেখে, তবে তুমি তাকে সরাসরি রেসপন্স করার পাশাপাশি বলবে নিচের বাটনগুলো সিলেক্ট করতে।";
 
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -329,26 +338,30 @@ app.post('/webhook', async (req, res) => {
       state.isSendingImages = false; 
       const aiReply = await getGeminiReply(senderId, userText);
       
-      await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          recipient: { id: senderId },
-          message: {
-            attachment: {
-              type: "template",
-              payload: {
-                template_type: "button",
-                text: `${aiReply}\n\n💖 ভাইয়া/আপু, বাকি কার্ডের ডিজাইনগুলো কি এখন পাঠাব?`,
-                buttons: [
-                  { type: "postback", title: "👍 হ্যাঁ, বাকিগুলো দাও", payload: "continue_images" },
-                  { type: "postback", title: "🙅 না, আর লাগবে না", payload: "stop_images" }
-                ]
+      try {
+        await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recipient: { id: senderId },
+            message: {
+              attachment: {
+                type: "template",
+                payload: {
+                  template_type: "button",
+                  text: `${aiReply}\n\n💖 ভাইয়া/আপু, বাকি কার্ডের ডিজাইনগুলো কি এখন পাঠাব?`,
+                  buttons: [
+                    { type: "postback", title: "👍 হ্যাঁ, বাকিগুলো দাও", payload: "continue_images" },
+                    { type: "postback", title: "🙅 না, আর লাগবে না", payload: "stop_images" }
+                  ]
+                }
               }
             }
-          }
-        }
-      });
+          })
+        });
+      } catch (e) {
+        console.error(e);
+      }
       continue;
     }
 
@@ -400,7 +413,7 @@ app.post('/webhook', async (req, res) => {
         const deliveryText = 
           '🚚 *ডেলিভারি, office ও কারখানা পলিসি:* 🏭\n\n' +
           '📍 *আমাদের প্রধান অফিস:* মানিকগঞ্জ।\n' +
-          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, लालবাগকেল্লা, এবং বাংলাবাজার।\n\n' +
+          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, লালবাগকেল্লা, এবং বাংলাবাজার।\n\n' +
           '📦 *সংগ্রহ করার নিয়ম:* কুরিয়ার সার্ভিসের মাধ্যমে দেশের যেকোনো প্রান্ত থেকে আপনি ক্যাশ অন ডেলিভারিতে প্রোডাক্ট নিতে পারবেন। এছাড়া সরাসরি মানিকগঞ্জ অফিস অথবা ঢাকার কারখানা থেকেও নিজে এসে সংগ্রহ করা সম্ভব। 🥰\n\n' +
           '⚠️ *বিশেষ শর্ত:* আমাদের কার্ডের ক্যাটাগরি ও ডিজাইন অনুযায়ী প্রিন্টিং কারখানা আলাদা হয়ে থাকে। তাই সরাসরি এসে সংগ্রহ করতে চাইলে, অর্ডার চূড়ান্ত হওয়ার পর আমাদের কাস্টমার সাপোর্ট টিম আপনাকে নির্দিষ্ট ফ্যাক্টরির লোকেশন কনফর্ম করে দেবে। ✨\n\n' +
           '🛍️ তাহলে ভাইয়া/আপু, আপনার পছন্দের ডিজাইনটি দিয়ে কি আজই অর্ডার বুক করে দেব? 🥰';
@@ -414,7 +427,7 @@ app.post('/webhook', async (req, res) => {
         state.priceObjectionCount += 1;
 
         if (state.priceObjectionCount < 3 && !state.hasOfferedDiscount) {
-          const aiDefenseReply = await getGeminiReply(senderId, userMessage);
+          const aiDefenseReply = await getGeminiReply(senderId, userText);
           await sendVerticalMainMenu(senderId, aiDefenseReply);
           scheduleFollowUps(senderId);
           continue;
@@ -444,26 +457,30 @@ app.post('/webhook', async (req, res) => {
           '৩. *ডেলিভারি:* জেলা শহরে বাকি ৭০% টাকা ক্যাশ অন ডেলিভারিতে সুন্দরবন/ইউনিক কুরিয়ারে দেওয়া যাবে। সময় লাগবে ৫-৭ কর্মদিবস। 🚚\n\n' +
           '👇 অর্ডার প্রসেসটি ঝটপট এগিয়ে নিতে আপনার কার্ডের কাঙ্ক্ষিত ভাষা সিলেক্ট করুন: ✨';
 
-        await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            recipient: { id: senderId },
-            message: {
-              attachment: {
-                type: "template",
-                payload: {
-                  template_type: "button",
-                  text: orderRules,
-                  buttons: [
-                    { type: "postback", title: "🇧🇩 বাংলায় ইনফো ফর্ম", payload: "bangla_form" },
-                    { type: "postback", title: "🇬🇧 English Form", payload: "english_form" }
-                  ]
+        try {
+          await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              recipient: { id: senderId },
+              message: {
+                attachment: {
+                  type: "template",
+                  payload: {
+                    template_type: "button",
+                    text: orderRules,
+                    buttons: [
+                      { type: "postback", title: "🇧🇩 বাংলায় ইনফো ফর্ম", payload: "bangla_form" },
+                      { type: "postback", title: "🇬🇧 English Form", payload: "english_form" }
+                    ]
+                  }
                 }
               }
-            }
-          })
-        });
+            })
+          });
+        } catch (e) {
+          console.error(e);
+        }
         continue;
       }
 
@@ -493,34 +510,4 @@ app.post('/webhook', async (req, res) => {
           '• Bride Name:\n• Father & Mother Name:\n\n' +
           '• Programme (Holud / Wedding / Reception)\n• Day: | Date: | Time: | Venue:\n\n' +
           '🚚 Courier Info (Name, Mobile, Address):\n\n' +
-          '_(Note: Please copy, fill up and send it back to lock your order now! 🥰)_';
-
-        await sendVerticalMainMenu(senderId, englishForm);
-        scheduleFollowUps(senderId);
-        continue;
-      }
-
-      const aiReply = await getGeminiReply(senderId, userText);
-      state.history.push({ role: 'user', content: userText });
-      state.history.push({ role: 'model', content: aiReply });
-      if (state.history.length > 10) state.history.shift();
-
-      await sendVerticalMainMenu(senderId, aiReply);
-      scheduleFollowUps(senderId);
-
-    } catch (err) {
-      console.error('Webhook Main Error:', err);
-    }
-  }
-});
-
-app.get('/webhook', (req, res) => {
-  if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
-    res.status(200).send(req.query['hub.challenge']);
-  } else {
-    res.sendStatus(403);
-  }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('🚀 BOONDHON Multi-Defense Psychology Engine Fixed & Live!'));
+          '_(Note: Please
