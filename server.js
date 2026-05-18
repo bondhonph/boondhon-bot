@@ -7,7 +7,7 @@ app.use(express.json());
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "BOONDHON_SECRET_2025";
 const PAGE_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY; // DeepSeek Key
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY; // Google Free Key
 
 // ── Image IDs ──────────────────────────────────────────────
 const AFFORDABLE_IDS = [
@@ -161,7 +161,7 @@ const SYSTEM_PROMPT = `তুমি BOONDHON Printing House-এর AI Sales Agen
 7. ANCHOR PRICING — "Premium ৯,০০০ টাকা হলে Affordable মাত্র ৭,০০০ — প্রায় ২,০০০ টাকা বাঁচছেন!"
 
 ━━━━━ PRICE LIST (সঠিক) ━━━━━
-৫০ পিস:  Affordable=২,৭৫০ ৳ | Premium=৩,২৫০ ৳
+৫০ পিস:  Affordable=২,৭সাড়ে সাতশো বা ২,৭৫০ ৳ | Premium=৩,২৫০ ৳
 ১০০ পিস: Affordable=৪,৫০০ ৳ | Premium=৫,৫০০ ৳ (FREE নিকাহনামা 🎁)
 ২০০ পিস: Affordable=৭,০০০ ৳ | Premium=৯,০০০ ৳ (FREE নিকাহনামা 🎁)
 Advance মাত্র ৩০% → bKash/Nagad: 01682588856
@@ -172,35 +172,58 @@ Customer "Affordable" বললে → reply-এ বলো: "এই মুহূ
 Customer "Premium" বললে → reply-এ বলো: "এই মুহূর্তে আপনাকে একটি নমুনা পাঠাচ্ছি ✨"
 Order confirm হলে → warmly congratulate করো এবং বলো টিম contact করবে`;
 
-// ── DeepSeek AI call ───────────────────────────────────────
+// ── Gemini 1.5 Flash Free AI call ─────────────────────────────
 async function getAIReply(senderId, userMessage) {
   try {
     const history = getHistory(senderId);
 
+    // Gemini-র মেসেজ ফরম্যাটে রূপান্তর
+    const contents = [];
+    
+    // System instruction যুক্ত করার কৌশল
+    contents.push({
+      role: 'user',
+      parts: [{ text: `SYSTEM INSTRUCTION: ${SYSTEM_PROMPT}\n\nUnderstood? Respond with yes.` }]
+    });
+    contents.push({
+      role: 'model',
+      parts: [{ text: "Yes, I will strictly act as Brishti Apa from BOONDHON Printing House." }]
+    });
+
+    // চ্যাট হিস্ট্রি অ্যাড করা
+    history.forEach(item => {
+      contents.push({
+        role: item.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: item.content }]
+      });
+    });
+
+    // বর্তমান ইউজার মেসেজ
+    contents.push({
+      role: 'user',
+      parts: [{ text: userMessage }]
+    });
+
     const response = await axios.post(
-      'https://api.deepseek.com/v1/chat/completions',
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
-        model: 'deepseek-chat', // DeepSeek-V3/R1 ইন্টিগ্রেশন এন্ডপয়েন্ট
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...history,
-          { role: 'user', content: userMessage }
-        ],
-        max_tokens: 250,
-        temperature: 0.7,
+        contents: contents,
+        generationConfig: {
+          maxOutputTokens: 250,
+          temperature: 0.7
+        }
       },
       {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
-        },
-        timeout: 12000
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 10000
       }
     );
 
-    return response.data?.choices?.[0]?.message?.content || 'বিয়ের কার্ডের কি কোনো নির্দিষ্ট বাজেট আছে আপনার? আমাকে জানাতে পারেন! 🌸';
+    const aiText = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    return aiText || 'বিয়ের কার্ডের কি কোনো নির্দিষ্ট বাজেট আছে আপনার? আমাকে জানাতে পারেন! 🌸';
+
   } catch (error) {
-    console.error('DeepSeek API Error:', error.response ? error.response.data : error.message);
+    console.error('Gemini API Error:', error.response ? error.response.data : error.message);
     return 'আমি আপনার মেসেজটি বুঝতে পেরেছি আপু/ভাইয়া। আমাদের কার্ডের কালেকশন দেখতে চাইলে "Affordable" বা "Premium" লিখে জানান! ✨';
   }
 }
@@ -339,7 +362,7 @@ app.post('/webhook', async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => res.send('🤖 BOONDHON Bot Running on DeepSeek!'));
+app.get('/', (req, res) => res.send('🤖 BOONDHON Bot Running on Free Gemini!'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('✅ BOONDHON Bot Server Started on port ' + PORT));
