@@ -280,7 +280,7 @@ async function getGeminiReply(senderId, userMessage) {
     "১. টোন: অত্যন্ত মিষ্টি, আন্তরিক ও সেলস ক্লোজিংমুখী। প্রচুর সুন্দর সুন্দর ইমোজি (🌸, ✨, 💰, 🛍️, 🥰) ব্যবহার করবে।\n" +
     "২. প্রাইস রুলস:\n" +
     "   - ৫০ পিস: Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n" +
-    "   - ১০০ পিস: Premium = ৫,৫০০ tobacco | Affordable = ৪,৫০০ টাকা\n" +
+    "   - ১০০ পিস: Premium = ৫,৫০০ টাকা | Affordable = ৪,৫০০ টাকা\n" +
     "   - ২০০ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n" +
     "   - অফার: কেবল ২০০ পিস বা তার বেশি নিলে 'FREE আকদনামা' অফার প্রযোজ্য।\n" +
     "৩. দাম নিয়ে আপত্তি হ্যান্ডেলিং (সাইকোলজিক্যাল ডিফেন্স):\n" +
@@ -413,7 +413,7 @@ app.post('/webhook', async (req, res) => {
         const deliveryText = 
           '🚚 *ডেলিভারি, office ও কারখানা পলিসি:* 🏭\n\n' +
           '📍 *আমাদের প্রধান অফিস:* মানিকগঞ্জ।\n' +
-          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, লালবাগকেল্লা, এবং বাংলাবাজার।\n\n' +
+          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, लालबागकेलला, এবং বাংলাবাজার।\n\n' +
           '📦 *সংগ্রহ করার নিয়ম:* কুরিয়ার সার্ভিসের মাধ্যমে দেশের যেকোনো প্রান্ত থেকে আপনি ক্যাশ অন ডেলিভারিতে প্রোডাক্ট নিতে পারবেন। এছাড়া সরাসরি মানিকগঞ্জ অফিস অথবা ঢাকার কারখানা থেকেও নিজে এসে সংগ্রহ করা সম্ভব। 🥰\n\n' +
           '⚠️ *বিশেষ শর্ত:* আমাদের কার্ডের ক্যাটাগরি ও ডিজাইন অনুযায়ী প্রিন্টিং কারখানা আলাদা হয়ে থাকে। তাই সরাসরি এসে সংগ্রহ করতে চাইলে, অর্ডার চূড়ান্ত হওয়ার পর আমাদের কাস্টমার সাপোর্ট টিম আপনাকে নির্দিষ্ট ফ্যাক্টরির লোকেশন কনফর্ম করে দেবে। ✨\n\n' +
           '🛍️ তাহলে ভাইয়া/আপু, আপনার পছন্দের ডিজাইনটি দিয়ে কি আজই অর্ডার বুক করে দেব? 🥰';
@@ -510,4 +510,34 @@ app.post('/webhook', async (req, res) => {
           '• Bride Name:\n• Father & Mother Name:\n\n' +
           '• Programme (Holud / Wedding / Reception)\n• Day: | Date: | Time: | Venue:\n\n' +
           '🚚 Courier Info (Name, Mobile, Address):\n\n' +
-          '_(Note: Please
+          '_(Note: Please copy, fill up and send it back to lock your order now! 🥰)_';
+
+        await sendVerticalMainMenu(senderId, englishForm);
+        scheduleFollowUps(senderId);
+        continue;
+      }
+
+      const aiReply = await getGeminiReply(senderId, userText);
+      state.history.push({ role: 'user', content: userText });
+      state.history.push({ role: 'model', content: aiReply });
+      if (state.history.length > 10) state.history.shift();
+
+      await sendVerticalMainMenu(senderId, aiReply);
+      scheduleFollowUps(senderId);
+
+    } catch (err) {
+      console.error('Webhook Main Error:', err);
+    }
+  }
+});
+
+app.get('/webhook', (req, res) => {
+  if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
+    res.status(200).send(req.query['hub.challenge']);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('🚀 BOONDHON Multi-Defense Engine Patched and Running!'));
