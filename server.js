@@ -12,7 +12,7 @@ const AFFORDABLE_IDS = ["1J9_qfkIdIWL5Sc9O8EokvYlGfQWrf5TD","1cOCFSa1ap-Z54Ldf2A
 
 const PREMIUM_IDS = ["182kOjBhoaqOTq7nr4ryI6re6fRuLITbH","1cTfbTDJDqBjsV-r7V1OjBZ-Z6tUAqwxj","1cA-MfI55Hh7ibreMQ4zPvt2i_LKxVHkR","1fvtC5mT4slvV_kROIej7awAGmCRc7TUl","1rLVZUQ8lw6ilWM76xxARtbUreQ3JIkdi","15AQWI3wP2a57-3OxHZTCfSbskgvC5YvH","1ahoubjUVdc9SJyi5n2rzZIsbugjCjHiz","1qlwwRe2Mr_gb8CZjkeG0-YxBSGmOHzZu","1oOdGtYFTz-xNmSLUO-VFS1YODqYZ74HJ","1zBBLQOfuAaPXhyr6At3tJ5DlTZ_nXfLy","11GVK5OYU7bjf8YaHeNAAnAHPks3T1Jme","1Kat8i9M3usZX8iX2xUCcX08RVocX9kKB","1f327zMbxf9s_Z2WSYhA4cAIF_NBiveKW","1T_pxOh0mn36N882wUMyYSsXKoZE4w1XA","1OQqgPUW0j1C5Ggvh50oTnnw5VsgEQv5I","15FGsZ0xdZd7DYZb4awafD8ysH_8g-A9O","1KUI4gzdhT-1I_LpzCMCQL8Sgfy4dU_Im","1amD4c_CLTODq8nca3N_H40vPiYp53VTm","1j2a0DIwsKoXWomTJ9RuJm1RncFH3mbqg","1Cl0fyeCN4T4mUxt-mhEQe6z6ZzBXsQsK","1Tpq2cCmWEooN2SYUIEgq-elk6tRK_5tV","1wlnH6L9DQcYtHHRDtPmrLGz-u6bslOgl","1ZrP-OujlWQGLEln1u8YTa4e3kjQY0yzI","1U6HoCb65TnMZsfKmGQ9wujvvppKzD7HY","1pbevqRrVV2_aYSNSMF8q7jMqnDMGpAUn","1KTSwcHJmwu1XximtqvbgSnP4Zrskg8T_","1ZG7hoRZgcj5F_UMCidzJSI2yAYoiUAf6","1uMyZI2cVy_uABGNPNoe-pXul2pPPhC_U","1gITGc6TLsrSjYkdMhURcUUNQH1y1GFpc","1FTFe6klyuHyUBsOfLeN_QsZABlhF_I1U","1n9SD-SDFTJMuW-J_9g-Sg3Pi9u4Q8VqZ","1PiYBXyjmd0jMff_0j9miNPSKsH549oOJ","1emx-RKETN5UkoPSIM66I9V6z8g4O6eL0","1V9mGxsK3TFtLWGBnnfoQQ9tgnvmfOOKj","1zCSjLjQOnSeOechbnhxepJSKxbdE7MeI","1HarOxTDa8wdWYkAHdsYCUNp6-bdW-0aM","1zIdOBb-MSqAEHDPmc_cJluX8dtgx5fkk","1V1JnATj5BVIrnhdP7FleskNC0RElJ0NZ","1liH9X1gZehPc1nmNoPrBMysviH-_AC_0","1kS9lA4Rt0Ro1H4zWO_hNBzKPNvLkpb6G","1ML1TVAbIwOfV8g8V2jbFOnhupomDRuj5","15AnUgqE1IMBspLC7jCVveFXzNMVrvZUl","16pVMXGt2O5OW0GnEH0vK_J7beXJOVTFG","1x_Ykz9171lN4T5AJzBpbHlqvPyM-JuJ4","1qj1usLPAzfw8y74c-KKF6MfbE6F_txEJ","1oUNXIOVWfaYe_O1s0AZP7WZbz9PkJdER","1lKmVy2Xgs27j5IW6CzbzYYHzIPpPB7pF","10R18Piu79JTBPmWu7l1q_ht5yRddjZj_","1C3AXVh-mfTMtcAFhrL044TvwklDIKYNa","1fZQ7kc9OkcDLMntUqUnUh-eVfGPqfIm","1Zb-AwPI5Ta8GaDX8T2QSMesenxFBEpNw","181vyiexE1YGUOav2BUEdLzWLn24qdvvm","1IUCMZwe292HN-OEcdnIbvWPuwGy6bgBG","1zyZ3QVHsOkTBADMm8jxJrk2ZIiiFE87F","1vtMWO4Ah45nvFExeMq82sfZc2JRsIiHc","1S0Oefe3t9iTNkhY_kjNojyHbb7uY4qHE","1rDFVMBfbrEt76kjiJLES3bnA_jmedsyI","119JxcFfIzDClqpTEC7ekWEMEPzH4_Hth","18roPGwQh8ImnrZ3ncIe8dt69JtUqrmwQ","147CRb0HLsfBA8aw9BNdO6dco7dQF6xNo","1oBnPqo8kAxNk4D3cgxlJAaZGqmP5F2Mb","1NVkZtKt1EHXcCA0c_latgAtBdckWGi6t","1EZIR0WmtoYLGcR-mUebaCHYYCL9NNykR","1zwQdkQRZVqXLvhRmHeuqNj3OtwFZ5xer","1p0cWNTy_cCV8_yrV3RuPp94stsaH8ZRm","1ntMdF0lJquZtJTYKc3t4WWGU-00DiYaM","1L1RhTUFgN2ziAWpKaRwlZipkjehPXnWZ","1jgARDI1JIjh_4qRUbvdpG1p0RBp4if7b","1TGZcnR1aYmln_E_UxgD_uInfREnRXf9T","1OKX94fxZ1BXqvDYY8SCQ22gR6Db2op2y","1J2_PY_Rk-x5ipzl_Ur5unrWCx2ZN7LvR","184YPeKcI8ilthW2VPvTcnJSTebj335-c","1-7lrprKPJQ-JuiNVi_bUdzHr_7S0NmNn","1ZAk92jKEyUhpO_faXYdbz5PPXkmo5YQN","1_9oor-2oJ4dHHOBkERAije6pvr8zAqPJ","1MX7rnQG2F0H8UX5ofGazO53knl7SUNE1","148EhK2GqvlP8Z-X-pK4Cp-Zb_sXqBLAu","1EuLjjvKMWIMkgbnK5PKOsKC5kG5H11"];
 
-// ✅ FIXED: Correctly implemented template literal ($ added) & HTTPS direct URL for Google Drive
+// 💯 FIXED: Correct Template Literal syntax (${id}) and highly compatible HTTPS format for Messenger
 function driveUrl(id) {
   return `https://lh3.googleusercontent.com/d/${id}`;
 }
@@ -141,7 +141,8 @@ async function getGeminiReply(senderId, userMessage) {
   const contents = state.history.map(h => ({ role: h.role === 'user' ? 'user' : 'model', parts: [{ text: h.content }] }));
   contents.push({ role: 'user', parts: [{ text: userMessage }] });
 
-  const systemText = "তুমি BOONDHON Printing House-এর AI Sales Agent 'Brishti Apa'। অত্যন্ত মিষ্টি ও আন্তরিক। প্রচুর সুন্দর সুন্দর ইমোজি (🌸, ✨, 💰, 🛍️, 🥰) ব্যবহার করবে। প্রাইস: ৫০ পিস Affordable=২৭৫০, Premium=৩২৫০। ১০০ পিস Affordable=৪৫০০, Premium=৫৫০০। ২০০ পিস Affordable=৭০০০, Premium=৯০০০। ২০০+ পিসে FREE ডিজিটাল আকদনামা/নিকাহনামা অফার প্রযোজ্য। দাম বেশি বললে কোয়ালিটি ও ফেইল প্রিন্টিং মেটেরিয়ালস বুঝিয়ে বলো, কমাবে না। যদি ১০০ পিস বা কম নিতে চায় তবে ২০০ পিস নেওয়ার অফার পুশ করো যে ২০০ পিস নিলে ১০০০ টাকা মূল্যের একটি নিকাহনামা একদম ফ্রি পাওয়া যাবে যাতে আদতে কাস্টমারের লাভ বেশি। নিজে থেকে কখনও ২০ পিসের কথা বলবে না, খুব জোর করলে কেবল বলবে ২০ পিস = ১৫০০ টাকা। কাস্টমার 'Eita koto tk', 'Price' বা 'order krbo kivsbe' লিখলে রেসপন্স করার পাশাপাশি নিচের বাটন সিলেক্ট করতে বলবে।";
+  // 🤖 UPGRADED SYSTEM INSTRUCTION: Fully equipped for intelligent open text analysis and human-like interactions.
+  const systemText = "তুমি BOONDHON Printing House-এর AI Sales Agent 'Brishti Apa'। অত্যন্ত মিষ্টি ও আন্তরিক। প্রচুর সুন্দর সুন্দর ইমোজি (🌸, ✨, 💰, 🛍️, 🥰) ব্যবহার করবে। কাস্টমার বাটন ছাড়া সাধারণ মেসেজ বা যেকোনো প্রশ্ন করলে তার কথা গভীর মনোযোগ দিয়ে অ্যানালাইসিস করবে এবং একদম রিয়েল মানুষের মতো প্রাসঙ্গিক ও বিশ্বস্ত উত্তর দেবে। প্রাইস লজিক: ৫০ পিস Affordable=২৭৫০, Premium=৩২৫০। ১০০ পিস Affordable=৪৫০০, Premium=৫৫০০। ২০০ পিস Affordable=৭০০০, Premium=৯০০০। ২০০+ পিসে FREE ডিজিটাল আকদনামা/নিকাহনামা অফার প্রযোজ্য। কাস্টমার দাম বেশি বললে কোয়ালিটি ও ফেইল প্রিন্টিং মেটেরিয়ালস বুঝিয়ে বলো, কিন্তু দাম কমাবে না। যদি ১০০ পিস বা কম নিতে চায় তবে ২০০ পিস নেওয়ার অফার পুশ করো যে ২০০ পিস নিলে ১০০০ টাকা মূল্যের একটি নিকাহনামা একদম ফ্রি পাওয়া যাবে যাতে আদতে কাস্টমারের লাভ বেশি। নিজে থেকে কখনও ২০ পিসের কথা বলবে না, খুব জোর করলে কেবল বলবে ২০ পিস = ১৫০০ টাকা। কাস্টমারের সাথে বন্ধুবৎসল আচরণ করো এবং উত্তরগুলো ছোট ও আকর্ষণীয় রাখো।";
 
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -151,7 +152,7 @@ async function getGeminiReply(senderId, userMessage) {
     const data = await response.json();
     return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'জি ভাইয়া/আপু! 🥰 কীভাবে সাহায্য করতে পারি বলুন?';
   } catch (err) {
-    return 'জি প্রিয় ভাইয়া/আপু! 🥰 নিচের মেনু থেকে সিলেক্ট করুন। ✨';
+    return 'জি প্রিয় ভাইয়া/আপু! 🥰 কীভাবে সাহায্য করতে পারি বলুন? ✨';
   }
 }
 
@@ -295,7 +296,7 @@ app.post('/webhook', async (req, res) => {
           'বৌ-ভাত-\nতারিখ (ইংরেজি সন):\nতারিখ (বাংলা সন):\nরোজঃ\nসময়ঃ\nস্থানঃ\n\n' +
           'অভ্যর্থনায়-\n(ছোট বাচ্চাদের নাম):\n\n' +
           'প্রয়োজনে-\n(ফোন নম্বর):\n\n' +
-          'শুভেচ্ছান্তে-\nনামঃ\n\n' +
+          'शुভেচ্ছান্তে-\nনামঃ\n\n' +
           '-------\n' +
           '❓ বর এবং কণে পিতা মাতার কত তম সন্তান?\n\n' +
           '❓ কার্ডটি ছেলের পক্ষ হতে নাকি মেয়ের পক্ষ হতে?\n\n' +
@@ -325,6 +326,7 @@ app.post('/webhook', async (req, res) => {
       }
     }
 
+    // ── 📸 Handling Stream Interruptions naturally ──
     if (state.isSendingImages) {
       state.isSendingImages = false;
       const aiReply = await getGeminiReply(senderId, userText);
@@ -346,12 +348,15 @@ app.post('/webhook', async (req, res) => {
       continue;
     }
 
+    // ── 🧠 SMART CHAT LOGIC (No Forced Menus for General Queries) ──
+    // If it's a general user text message, analyze context and send a beautiful fluid text response.
     const aiReply = await getGeminiReply(senderId, userText);
     state.history.push({ role: 'user', content: userText });
     state.history.push({ role: 'model', content: aiReply });
     while (state.history.length > 10) state.history.shift();
     
-    await sendMainMenu(senderId, aiReply);
+    // Pure, natural conversational reply without irritating the customer with repeating big button lists
+    await sendMsg(senderId, aiReply, aiReply.length > 150 ? 2200 : 1300);
     scheduleFollowUps(senderId);
   }
 });
