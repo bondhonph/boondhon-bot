@@ -44,7 +44,7 @@ const AFFORDABLE_IDS = [
   "13_b1RSIwud_d2LvFwTc337ls-MfEmXRX","109AXjs6FKNUVfBfcQySBW_sqOzkcbrjV", 
   "1WJu3rqnGe-aYs1FZymiGtV-SEP6W7i-m","1IWSDwW4uTrWlNWo14GfbHPn7Fq0g_nzL", 
   "1g800vKvxkKR_hUYKvv0-Gh1jNJrqnyaq","11Uy_p33yXsQiMW0qy7l1b1qWvzQXLOEe", 
-  " PeaR16EDy3xXTJDbPuP9GHJiX3F2Ubea","1firMVBvk_QAfMfQONWCbvr1oo0dtK53F", 
+  "1PeaR16EDy3xXTJDbPuP9GHJiX3F2Ubea","1firMVBvk_QAfMfQONWCbvr1oo0dtK53F", 
   "1RNSqAZ7kxJSQ3jwzRfreYejLGGeXCz2h","1r-JnbeHPGBO0Q9cceYh1bzSCLKBOJEN_", 
   "1TtkzWXQisd7UShIg46wdW6vmWYbpUjkk","1vj8zzSFy1H_c7fAGi_REfMR-R8IPwTfK", 
   "1Q_DJOcMXmZrR7P9szIw9LWQ5-dyRLO2y","1OQQQN87UMWlaTcPnzFf9zwRTxxIqRO5-", 
@@ -116,79 +116,48 @@ function detectTrigger(text) {
   if (!text) return null;
   const t = text.toLowerCase();
   
-  const affordable = ["affordable", "অ্যাফোর্ডেবল", "সাশ্রয়", "কম দাম", "affordable card", "affodable", "এফোর্ডেবল"];
-  const premium = ["premium", "প্রিমিয়াম", "premium card", "প্রিমিয়াম কার্ড"];
+  const affordable = ["affordable", "অ্যাফোর্ডেবল", "সাশ্রয়", "কম দাম", "affordable card", "affodable", "এফোর্ডেবল", "affordable কালেকশন"];
+  const premium = ["premium", "প্রিমিয়াম", "premium card", "প্রিমিয়াম কার্ড", "premium কালেকশন"];
+  const price = ["দাম", "প্রাইস", "price", "অফার", "দাম ও অফার"];
+  const delivery = ["ডেলিভারি", "কারখানা", "delivery", "অফিস", "ঠিকানা"];
   const selectBangla = ["বাংলা", "bangla", "বাংলা ফর্ম", "বাংলায়"];
   const selectEnglish = ["english", "ইংরেজি", "ইংরেজিতে", "english form"];
   const sale = [
     "অর্ডার কনফার্ম", "order confirm", "কনফার্ম করলাম", "নিব", "নেব", 
-    "বিকাশ দেব", "অর্ডার করব", "অর্ডার দিতে চাই", "confirm করলাম", "কনফার্ম"
+    "অর্ডার করব", "অর্ডার দিতে চাই", "confirm করলাম", "কনফার্ম", "অর্ডার কনফার্ম করুন"
   ];
 
   if (sale.some(w => t.includes(w))) return "sale";
   if (affordable.some(w => t.includes(w))) return "affordable";
   if (premium.some(w => t.includes(w))) return "premium";
+  if (price.some(w => t.includes(w))) return "price";
+  if (delivery.some(w => t.includes(w))) return "delivery";
   if (selectBangla.some(w => t.includes(w))) return "bangla_form";
   if (selectEnglish.some(w => t.includes(w))) return "english_form";
   return null;
 }
 
-// ── Gemini API Integration ────────────────────────────────
-async function getGeminiReply(senderId, userMessage) {
-  const history = getHistory(senderId);
-  const contents = history.map(h => ({
-    role: h.role === 'user' ? 'user' : 'model',
-    parts: [{ text: h.content }]
-  }));
-  contents.push({ role: 'user', parts: [{ text: userMessage }] });
+// ── Core Navigation Buttons (Vertical Layout Menu) ────────
+const CORE_QUICK_REPLIES = [
+  { content_type: "text", title: "🌸 Affordable কালেকশন", payload: "TRIGGER_AFFORDABLE" },
+  { content_type: "text", title: "✨ Premium কালেকশন", payload: "TRIGGER_PREMIUM" },
+  { content_type: "text", title: "💰 দাম ও অফার লিস্ট", payload: "TRIGGER_PRICE" },
+  { content_type: "text", title: "🚚 ডেলিভারি ও কারখানা", payload: "TRIGGER_DELIVERY" },
+  { content_type: "text", title: "🛍️ অর্ডার কনফার্ম করুন", payload: "TRIGGER_SALE" }
+];
 
-  const systemInstructionText = 
-    `তুমি BOONDHON Printing House-এর AI Sales Agent "Brishti Apa"। কাস্টমার তোমাকে যেকোনো প্রশ্ন (দাম, কোয়ালিটি, কাস্টমাইজেশন বা বাইরের যেকোনো জিজ্ঞাসা) করতে পারে, তোমাকে সবসময় অত্যন্ত প্রফেশনাল, মিষ্টি ও চতুরতার সাথে সেলস ওরিয়েন্টেড উত্তর দিতে হবে।\n\n` +
-    `━━━━━ গুরুত্বপূর্ণ গাইডলাইন ও ৪টি মূল শর্ত ━━━━━\n` +
-    `১. ভাষা ও টোন: সবসময় বাংলায় অত্যন্ত মিষ্টি, আন্তরিক ও কাস্টমার-বান্ধব ভাষায় ছোট ছোট (২-৪ লাইন) কথা বলবে।\n\n` +
-    `২. প্রাইস লিস্ট ও অফার ডিফেন্স (নেগোসিয়েশন):\n` +
-    `   - ২০ পিস = ১,৫০০ টাকা (৭৫ টাকা/পিস)\n` +
-    `   - ৫০ পিস: Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n` +
-    `   - ১০০ পিস: Premium = ৫,৫০০ টাকা | Affordable = ৪,৫০০ টাকা | Luxury = ৮,৫০০ টাকা\n` +
-    `   - ২০০ পিস: Premium = ৯,০০০ টাকা (৪৫ টাকা/পিস) | Affordable = ৭,০০০ টাকা (৩৫ টাকা/পিস)\n` +
-    `   - অফার ডিফেন্স: কাস্টমারকে পরিষ্কার বলবে ২০০ পিস বা তার বেশি অর্ডার করলেই কেবল "FREE নিকাহনামা" অফারটি পাওয়া যাবে। ১০০ পিসে কোনো ফ্রি নিকাহনামা নেই।\n` +
-    `   - কম পিসের বুদ্ধি: কেউ কম পিস (যেমন ২০ পিস) চাইলে বোঝাবে: "আপু/ভাইয়া, ছোট অর্ডারে প্রিন্টিং সেটআপ কস্ট বেশি পড়ে বিধায় পার পিস রেট একটু বেশি আসে। কিন্তু আপনি যদি ৫০ পিস নেন, তবে পার পিস অনেক কম পড়বে এবং আপনার অনেক টাকা সাশ্রয় হবে!"\n` +
-    `   - দাম বেশির যুক্তি: কাস্টমার দাম বেশি বললে বলবে: "ভাইয়া/আপু, বাজারে কম দামের অনেক নরমাল কার্ড পাবেন, কিন্তু আমাদের কার্ডের পেপার কোয়ালিটি, গোল্ডেন ফয়েল এবং ফিনিশিং একদম প্রিমিয়াম। কার্ড হাতে নিলেই রাজকীয় লুকটা বুঝতে পারবেন।"\n\n` +
-    `৩. অফিস, কারখানা ও ডিজাইন শর্ত:\n` +
-    `   - প্রধান অফিস: মানিকগঞ্জ।\n` +
-    `   - কারখানা: ঢাকা ফকিরাপুল, লালবাগকেল্লা, বাংলাবাজার।\n` +
-    `   - বিশেষ শর্ত: কাস্টমারকে অবশ্যই মনে করিয়ে দেবে যে, কার্ডের নির্দিষ্ট ডিজাইনের উপর ভিত্তি করে আমাদের প্রিন্টিং কারখানা আলাদা হয়। তাই কোন কারখানা থেকে প্রোডাক্ট কালেক্ট করতে হবে, তা অর্ডার কনফার্ম হওয়ার পর আমাদের টিম চূড়ান্তভাবে জানিয়ে দেবে।\n\n` +
-    `৪. অর্ডার প্রসেস: কাস্টমার অর্ডার করতে চাইলে তাকে জানাবে যে নিয়মাবলী পাঠানো হচ্ছে এবং কার্ডের ভাষা (বাংলা নাকি ইংরেজি) জানতে চাওয়া হচ্ছে।`;
-
-  try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: contents,
-        systemInstruction: { parts: [{ text: systemInstructionText }] },
-        generationConfig: { maxOutputTokens: 250, temperature: 0.7 }
-      })
-    });
-
-    const data = await response.json();
-    if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-      return data.candidates[0].content.parts[0].text;
-    } else {
-      return 'জি ভাইয়া/আপু, আমাদের বিয়ের কার্ডের সুন্দর সুন্দর কালেকশন দেখতে চাইলে "Affordable" বা "Premium" লিখে জানাতে পারেন। অর্ডার করতে চাইলে লিখুন "অর্ডার কনফার্ম"। 😊';
-    }
-  } catch (err) {
-    console.error('Gemini API Error:', err);
-    return 'জি ভাইয়া/আপু, আপনার মেসেজটি বুঝতে একটু সমস্যা হয়েছে। আমাদের কালেকশন দেখতে বা অর্ডার প্রসেস করতে দয়া করে আরেকবার বলবেন কি? 😊';
-  }
-}
-
-// ── Messenger Sender Functions ─────────────────────────────
-async function sendText(recipientId, text) {
+// ── Messenger Custom Sender Function ───────────────────────
+async function sendTextWithMenu(recipientId, text, customReplies = CORE_QUICK_REPLIES) {
   await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ recipient: { id: recipientId }, message: { text } })
+    body: JSON.stringify({
+      recipient: { id: recipientId },
+      message: {
+        text: text,
+        quick_replies: customReplies
+      }
+    })
   });
 }
 
@@ -212,21 +181,50 @@ async function sendAllImagesOneByOne(recipientId, idArray) {
   }
 }
 
-async function sendLanguageSelection(recipientId) {
-  await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      recipient: { id: recipientId },
-      message: {
-        text: "ভাইয়া/আপু, আপনার কার্ডের ভেতরের লেখাগুলো কি বাংলায় প্রিন্ট হবে নাকি ইংরেজিতে (English)? নিচের বাটনে চাপ দিয়ে সিলেক্ট করুন, আমি ফর্মটি দিয়ে দিচ্ছি: 👇",
-        quick_replies: [
-          { content_type: "text", title: "বাংলায়", payload: "SELECT_BANGLA" },
-          { content_type: "text", title: "English", payload: "SELECT_ENGLISH" }
-        ]
-      }
-    })
-  });
+// ── Gemini API Integration ────────────────────────────────
+async function getGeminiReply(senderId, userMessage) {
+  const history = getHistory(senderId);
+  const contents = history.map(h => ({
+    role: h.role === 'user' ? 'user' : 'model',
+    parts: [{ text: h.content }]
+  }));
+  contents.push({ role: 'user', parts: [{ text: userMessage }] });
+
+  const systemInstructionText = 
+    `তুমি BOONDHON Printing House-এর AI Sales Agent "Brishti Apa"। কাস্টমার যেকোনো প্রশ্ন করুক না কেন, তুমি সবসময় অত্যন্ত মিষ্টি ও প্রফেশনাল ভাষায় উত্তর দেবে।\n\n` +
+    `━━━━━ গুরুত্বপূর্ণ সেলস গাইডলাইন ━━━━━\n` +
+    `১. কাস্টমারকে যেকোনো তথ্যের উত্তর দেওয়ার সময় ছোট ২-৪ লাইনে মিষ্টি করে মূল পয়েন্টটি বুঝিয়ে বলবে।\n` +
+    `২. প্রাইস ও নেগোসিয়েশন কন্ডিশন:\n` +
+    `   - ২০ পিস = ১,৫০০ টাকা (৭৫ টাকা/পিস)\n` +
+    `   - ৫০ পিস: Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n` +
+    `   - ১০০ পিস: Premium = ৫,৫০০ টাকা | Affordable = ৪,৫০০ টাকা | Luxury = ৮,৫০০ টাকা\n` +
+    `   - ২০০ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n` +
+    `   - ২০০ পিস বা তার বেশি নিলে "FREE নিকাহনামা" অফার পাবে। ১০০ পিসে কোনো ফ্রি নিকাহনামা নেই।\n` +
+    `   - কম পিস নিতে চাইলে সেটআপ কস্টের কথা বুঝিয়ে বলো যে ৫০ পিস নিলে পার পিস রেট অনেক কমে যাবে।\n` +
+    `৩. অফিস ও কারখানা পলিসি:\n` +
+    `   - প্রধান অফিস: মানিকগঞ্জ। কারখানা: ঢাকা ফকিরাপুল, लालবাগকেল্লা, বাংলাবাজার।\n` +
+    `   - কাস্টমারকে মনে করিয়ে দেবে যে ডিজাইন অনুযায়ী কারখানা আলাদা হয়, তাই কুরিয়ার ছাড়া সরাসরি কারখানা থেকে নিজে এসে কালেক্ট করতে চাইলে অর্ডার চূড়ান্ত হওয়ার পর আমাদের টিম চূড়ান্ত কারখানা কনফার্ম করবে।`;
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: contents,
+        systemInstruction: { parts: [{ text: systemInstructionText }] },
+        generationConfig: { maxOutputTokens: 200, temperature: 0.7 }
+      })
+    });
+
+    const data = await response.json();
+    if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+      return data.candidates[0].content.parts[0].text;
+    }
+    return 'জি ভাইয়া/আপু, আপনার সুন্দর সুন্দর বিয়ের কার্ডের ডিজাইন দেখা থেকে শুরু করে দাম ও ডেলিভারি পলিসি এক ক্লিকেই জানতে নিচের মেনু বাটনগুলো ব্যবহার করতে পারেন। 😊';
+  } catch (err) {
+    console.error('Gemini API Error:', err);
+    return 'জি ভাইয়া/আপু, আপনার চ্যাট প্রসেস করতে সাহায্য করছি। নিচের বাটনগুলো চেপে আপনার পছন্দের অপশনটি বেছে নিন। 😊';
+  }
 }
 
 // ── Webhook Endpoint ───────────────────────────────────────
@@ -247,64 +245,91 @@ app.post('/webhook', async (req, res) => {
     try {
       const trigger = detectTrigger(userText);
       
-      // কাস্টমার যদি ইমেজ কালেকশন দেখতে চায় - তবে ইমেজ লোড হওয়ার আগেই ইন্ট্রো পাঠানো হবে
+      // ১. স্বাগতম ও ইমেজ লুপ ট্রিগার (Affordable)
       if (trigger === 'affordable') {
-        const welcomeAffordable = `🌸 স্বাগতম ভাইয়া/আপু! আমাদের Affordable কালেকশনে মোট ${AFFORDABLE_IDS.length}টি চমৎকার ডিজাইন রয়েছে। ডিজাইনগুলো লোড হতে একটু সময় লাগতে পারে, দয়া করে একটু অপেক্ষা করুন। আমি এক এক করে সবগুলো ছবি নিচে ফ্রেশ ইমেজ আকারে পাঠাচ্ছি, যাতে আপনি ক্লিক করলেই ফুল স্ক্রিন জুম করে দেখতে পারেন: 👇`;
-        await sendText(senderId, welcomeAffordable);
+        const txt = `🌸 স্বাগতম ভাইয়া/আপু! আমাদের Affordable কালেকশনে মোট ${AFFORDABLE_IDS.length}টি চমৎকার ডিজাইন রয়েছে। ডিজাইনগুলো এক এক করে নিচে ফ্রেশ পিওর ইমেজ আকারে পাঠানো হচ্ছে, লোড হতে সামান্য কিছু সময় লাগতে পারে। একটু অপেক্ষা করুন... 👇`;
+        await sendTextWithMenu(senderId, txt, CORE_QUICK_REPLIES);
         await sendAllImagesOneByOne(senderId, AFFORDABLE_IDS);
-        addToHistory(senderId, 'user', userText);
-        addToHistory(senderId, 'model', welcomeAffordable);
         continue;
       } 
       
+      // ১. স্বাগতম ও ইমেজ লুপ ট্রিগার (Premium)
       if (trigger === 'premium') {
-        const welcomePremium = `✨ স্বাগতম ভাইয়া/আপু! আমাদের Premium কালেকশনে মোট ${PREMIUM_IDS.length}টি প্রিমিয়াম ও এক্সক্লুসিভ ডিজাইন রয়েছে। সবগুলো ছবি এক এক করে নিচে ফ্রেশ পিওর ইমেজ আকারে পাঠানো হচ্ছে, লোড হতে সামান্য কিছু সময় লাগতে পারে। ছবিতে ক্লিক করলেই ফুল স্ক্রিন জুম করে দেখতে পাবেন: 👇`;
-        await sendText(senderId, welcomePremium);
+        const txt = `✨ স্বাগতম ভাইয়া/আপু! আমাদের Premium কালেকশনে মোট ${PREMIUM_IDS.length}টি এক্সক্লুসিভ ডিজাইন রয়েছে। সবগুলো ছবি নিচে পিওর ইমেজ আকারে সিরিয়ালি পাঠানো হচ্ছে, ছবিতে ক্লিক করলেই ফুল স্ক্রিন জুম করে দেখতে পাবেন। লোড হতে সামান্য সময় লাগতে পারে... 👇`;
+        await sendTextWithMenu(senderId, txt, CORE_QUICK_REPLIES);
         await sendAllImagesOneByOne(senderId, PREMIUM_IDS);
-        addToHistory(senderId, 'user', userText);
-        addToHistory(senderId, 'model', welcomePremium);
         continue;
       }
 
-      // সাধারণ চ্যাট এবং অন্যান্য ট্র্রিগারের জন্য জেমিনির এআই রেসপন্স
+      // ২. প্রাইস লিস্ট ও অফার ডিফেন্স
+      if (trigger === 'price') {
+        const priceText = 
+          '💰 *BOONDHON বিয়ের কার্ডের প্রাইস লিস্ট:*\n\n' +
+          '• *২০ পিস:* ১,৫০০ টাকা (ছোট অর্ডারে মেকিং ও প্রিন্টিং সেটআপ কস্ট বেশি পড়ে বিধায় ৭৫ টাকা/পিস আসে।)\n' +
+          '• *৫০ পিস:* Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n' +
+          '• *১০০ পিস:* Premium = ৫,৫০০ টাকা | Affordable = ৪,৫০০ টাকা | Luxury = ৮,৫০০ টাকা\n' +
+          '• *২০০ পিস:* Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n\n' +
+          '🎁 *বিশেষ অফার:* ২০০ পিস বা তার বেশি কার্ড অর্ডার করলে চমৎকার একটি আকদনামা/নিকাহনামা একদম *FREE* পেয়ে যাবেন! (১০০ পিসে কোনো ফ্রি নিকাহনামা নেই ভাইয়া/আপু)। এখনই কনফর্ম করলে ঈদের আগেই ডেলিভারি নিশ্চিত হবে!';
+        
+        await sendTextWithMenu(senderId, priceText, CORE_QUICK_REPLIES);
+        continue;
+      }
+
+      // ৪. অফিস, কারখানা ও ডিজাইন শর্ত
+      if (trigger === 'delivery') {
+        const deliveryText = 
+          '🚚 *ডেলিভারি, অফিস ও কারখানা পলিসি:*\n\n' +
+          '📍 *আমাদের প্রধান অফিস:* মানিকগঞ্জ।\n' +
+          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, লালবাগকেল্লা, এবং বাংলাবাজার।\n\n' +
+          '📦 *সংগ্রহ করার নিয়ম:* কুরিয়ার সার্ভিসের মাধ্যমে দেশের যেকোনো প্রান্ত থেকে আপনি ক্যাশ অন ডেলিভারিতে প্রোডাক্ট নিতে পারবেন। এছাড়া সরাসরি মানিকগঞ্জ অফিস অথবা ঢাকার কারখানা থেকেও নিজে এসে সংগ্রহ করা সম্ভব।\n\n' +
+          '⚠️ *বিশেষ শর্ত:* আমাদের কার্ডের ক্যাটাগরি ও ডিজাইন অনুযায়ী প্রিন্টিং কারখানা আলাদা হয়ে থাকে। তাই আপনি সরাসরি এসে সংগ্রহ করতে চাইলে, অর্ডার চূড়ান্ত হওয়ার পর আমাদের কাস্টমার সাপোর্ট টিম আপনাকে শতভাগ কনফর্ম করে দেবে যে আপনার কার্ডটি কোন কারখানা থেকে সংগ্রহ করতে হবে।';
+        
+        await sendTextWithMenu(senderId, deliveryText, CORE_QUICK_REPLIES);
+        continue;
+      }
+
+      // ৩. অর্ডার ও ভাষা সিলেকশন
+      if (trigger === 'sale') {
+        const orderRules = 
+          '📋 *অর্ডার করার নিয়মাবলী:*\n\n' +
+          '১. *অ্যাডভান্স পেমেন্ট:* অর্ডার কনফার্ম করতে টোটাল বিলের ৩০% এডভান্স পেমেন্ট করতে হবে। বিকাশ/নগদ/রকেট (পার্সোনাল): *01682588856*\n' +
+          '২. *ডিজাইন প্রক্রিয়া:* পেমেন্টের পর আমাদের এক্সপার্ট ডিজাইনার আপনার দেওয়া তথ্য দিয়ে কার্ডের ডেমো ডিজাইন তৈরি করে ইনবক্সে দেখাবে। আপনি দেখে চূড়ান্ত করার পরই প্রিন্টিং শুরু হবে।\n' +
+          '৩. *ডেলিভারি:* জেলা শহরে বাকি ৭০% টাকা ক্যাশ অন ডেলিভারিতে সুন্দরবন/ইউনিক কুরিয়ারে দেওয়া যাবে। সময় লাগবে ৫-৭ কর্মদিবস।\n\n' +
+          '👇 অর্ডার প্রসেসটি এগিয়ে নিতে আপনার কার্ডের ভাষা সিলেক্ট করুন:';
+
+        const langReplies = [
+          { content_type: "text", title: "🇧🇩 বাংলায় ফর্ম দিন", payload: "SELECT_BANGLA" },
+          { content_type: "text", title: "🇬🇧 English Form", payload: "SELECT_ENGLISH" }
+        ];
+        
+        await sendTextWithMenu(senderId, orderRules, langReplies);
+        continue;
+      }
+
+      // ফর্ম ডেলিভারি (বাংলা)
+      if (trigger === 'bangla_form') {
+        const banglaForm =
+          'বর-\nনামঃ \nপিতাঃ\nমাতাঃ\nঠিকানাঃ\n\nকণে-\nনামঃ \nপিতাঃ\nমাতাঃ\nঠিকানাঃ\n\nগায়ে হলুদ-\nতারিখ (ইংরেজি ও বাংলা):\nরোজঃ | সময়ঃ | স্থানঃ\n\nশুভ বিবাহ-\nতারিখ (ইংরেজি ও বাংলা):\nরোজঃ | বরযাত্রা সময়ঃ | স্থানঃ\n\nবৌ-ভাত-\nতারিখ (ইংরেজি ও বাংলা):\nরোজঃ | সময়ঃ | স্থানঃ\n\nপ্রয়োজনে (ফোন নম্বর) / শুভেচ্ছান্তে-\n\n-------\nকার্ডটি ছেলের পক্ষ নাকি মেয়ের পক্ষ হতে?\n🚚 কুরিয়ার ইনফরমেশন (নাম, মোবাইল, ঠিকানা):\n\n_(নোট: কপি করে ফিলাপ করে পাঠিয়ে দিন)_';
+
+        await sendTextWithMenu(senderId, banglaForm, CORE_QUICK_REPLIES);
+        continue;
+      }
+
+      // ফর্ম ডেলিভারি (ইংরেজি)
+      if (trigger === 'english_form') {
+        const englishForm =
+          'Groom Name:\nFather & Mother Name:\n\nBride Name:\nFather & Mother Name:\n\nProgramme (Holud / Wedding / Reception)\nDay:\nDate:\nTime:\nVenue:\n\n🚚 Courier Info (Name, Mobile, Address):\n\n_(Note: Copy, fill up and send back)_';
+
+        await sendTextWithMenu(senderId, englishForm, CORE_QUICK_REPLIES);
+        continue;
+      }
+
+      // সাধারণ চ্যাট কিউরিগুলোর জন্য জেমিনি রিপ্লাই জেনারেট করবে এবং নিচে ভার্টিকাল কোর মেনু অ্যাড করে দেবে
       const aiReply = await getGeminiReply(senderId, userText);
       addToHistory(senderId, 'user', userText);
       addToHistory(senderId, 'model', aiReply);
 
-      await sendText(senderId, aiReply);
-
-      if (trigger === 'sale') {
-        const orderRules = 
-          '📋 *অর্ডার করার নিয়মাবলী:*\n\n' +
-          '১. *অ্যাডভান্স পেমেন্ট:*\n' +
-          '> অর্ডার কনফার্ম করতে হবে মোট মূল্যের ৩০% এডভান্স পেমেন্ট।\n' +
-          '> পেমেন্ট করতে পারবেন নিম্নলিখিত মাধ্যমে: বিকাশ, নগদ, রকেট (পার্সোনাল) নম্বর: *01682588856*\n\n' +
-          '২. *ডিজাইন প্রক্রিয়া:*\n' +
-          '> আমাদের ডিজাইনার আপনার তথ্য দিয়ে কার্ডের ডিজাইন তৈরি করে আপনাকে পাঠাবে।\n' +
-          '> আপনি ডিজাইন চূড়ান্ত করার পর আমরা প্রিন্ট প্রক্রিয়া শুরু করব।\n\n' +
-          '৩. *ডেলিভারি এবং পেমেন্ট:*\n' +
-          '> প্রিন্ট শেষে কার্ড রেডি করে জেলা শহরে ক্যাশ অন ডেলিভারি-এর মাধ্যমে পাঠানো হবে।\n' +
-          '> কুরিয়ার ডেলিভারি গ্রহণের সময় বাকি ৭০% পেমেন্ট করতে হবে।\n' +
-          '> জেলা শহরের বাইরে ক্যাশ অন ডেলিভারি উপলব্ধ নয়।\n' +
-          '> এছাড়া সরাসরি আমাদের মানিকগঞ্জ অফিস বা ঢাকার (ফকিরাপুল, লালবাগকেল্লা, বাংলাবাজার) কারখানা থেকে নিজে এসে সংগ্রহ করতে পারবেন। (নোট: আপনার সিলেক্ট করা ডিজাইন অনুযায়ী আমাদের টিম কনফর্ম করবে কোন কারখানা থেকে সংগ্রহ করতে হবে)।\n\n' +
-          '৪. *ডেলিভারি সময়:*\n' +
-          '> কার্ড ডেলিভারি পেতে ৫ থেকে ৭ কর্মদিবস সময় লাগবে।';
-        
-        await sendText(senderId, orderRules);
-        await sendLanguageSelection(senderId);
-
-      } else if (trigger === 'bangla_form') {
-        const banglaForm =
-          'বর-\nনামঃ \nপিতাঃ\nমাতাঃ\nঠিকানাঃ\n\nকণে-\nনামঃ \nপিতাঃ\nমাতাঃ\nঠিকানাঃ\n\nগায়ে হলুদ-\nতারিখ (ইংরেজি সন):\nতারিখ (বাংলা সন):\nরোজঃ\nসময়ঃ\nস্থানঃ\n\nশুভ বিবাহ-\nতারিখ (ইংরেজি সন):\nতারিখ (বাংলা সন):\nরোজঃ\nলগ্ন (শুধু মাত্র হিন্দুদের জন্য):\nবরযাত্রা/সময়ঃ\nস্থানঃ\n\nবৌ-ভাত-\nতারিখ (ইংরেজি সন):\nতারিখ (বাংলা সন):\nরোজঃ\nসময়ঃ\nস্থানঃ\n\nঅভ্যর্থনায়-\n(ছোট বাচ্চাদের নাম):\n\nপ্রয়োজনে-\n(ফোন নম্বর):\n\nশুভেচ্ছান্তে-\nনামঃ\n\n-------\nবর এবং কণে পিতা মাতার কত তম সন্তান?\n\n\nকার্ডটি ছেলের পক্ষ হতে নাকি মেয়ের পক্ষ হতে?\n\n-------\nকুরিয়ার ইনফরমেশন-\nযে রিসিভ করবে তার নামঃ\nমোবাইল নম্বরঃ\nবিস্তারিত ঠিকানাঃ\n\n💡 _(নোট: সব তথ্য অ্যাড না করলেও চলবে, যেগুলো প্রয়োজন নেই সেগুলো ফাঁকা রেখে ফর্মটি ফিলাপ করে পাঠিয়ে দিতে পারেন)_';
-
-        await sendText(senderId, banglaForm);
-
-      } else if (trigger === 'english_form') {
-        const englishForm =
-          'Groom Name:\nFather Name:\nMother Name:\n\nBride Name:\nFather Name:\nMother Name:\n\nProgramme\n\nHolud Sandya\nDay:\nDate:\nTime:\nVenue:\nAddress:\n\nWedding\nDay:\nDate:\nTime:\nVenue:\nAddress:\n\nReception\nDay:\nDate:\nTime:\nVenue:\nAddress:\n\nWith Best Regard:\nName:\n\nRSV\nNumber:\n\n🚚 Courier Information-\nReceiver Name:\nMobile Number:\nDetailed Address:\n\n💡 _(Note: You can skip any fields that are not required for your card layout)_';
-
-        await sendText(senderId, englishForm);
-      }
+      await sendTextWithMenu(senderId, aiReply, CORE_QUICK_REPLIES);
 
     } catch (err) {
       console.error('Webhook Main Error:', err);
@@ -321,4 +346,4 @@ app.get('/webhook', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('✅ BOONDHON Ultimate Gemini Bot Engine is Fully Active!'));
+app.listen(PORT, () => console.log('✅ BOONDHON Pro App-Style Bot Engine is Live!'));
