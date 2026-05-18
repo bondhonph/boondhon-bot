@@ -1,13 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-const axios = require('axios');
-
 const app = express();
 app.use(express.json());
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "BOONDHON_SECRET_2025";
 const PAGE_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY; // Google Free Key
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 // ── Image IDs ──────────────────────────────────────────────
 const AFFORDABLE_IDS = [
@@ -120,7 +118,6 @@ function addToHistory(senderId, role, content) {
 
 // ── Trigger detection ──────────────────────────────────────
 function detectTrigger(text) {
-  if (!text) return null;
   const t = text.toLowerCase();
   const affordable = ["affordable", "অ্যাফোর্ডেবল", "সাশ্রয়", "কম দাম", "affordable card", "affodable", "এফোর্ডেবল"];
   const premium = ["premium", "প্রিমিয়াম", "premium card", "প্রিমিয়াম কার্ড"];
@@ -152,118 +149,110 @@ const SYSTEM_PROMPT = `তুমি BOONDHON Printing House-এর AI Sales Agen
 - কখনো বলবে না যে তুমি AI বা bot
 
 ━━━━━ PSYCHOLOGY TECHNIQUES ━━━━━
-1. SOCIAL PROOF — "গত সপ্তাহে ৩টা wedding-এ আমাদের Premium কার্ড গেছে — সবাই অবাক হয়ে গেছেন! 😊"
-2. SCARCITY / URGENCY — "এই মাসে slot প্রায় ভরে গেছে — আরেকটু দেরি করলে date নাও পেতে পারেন 😅"
-3. LOSS AVERSION — "১০০ পিসে FREE নিকাহনামা — এটা অন্য কোথাও পাবেন না।"
-4. VALUE STORYTELLING — "বিয়ের কার্ড মানুষ সারাজীবন সংরক্ষণ করে। সেটা যদি সুন্দর হয় — মেহমানরা মনে রাখে।"
-5. MICRO-COMMITMENT — "বিয়েটা কি এ বছরের মধ্যে? 😊" → "কতজন মেহমান আসছেন?"
-6. EMPATHY FIRST — "বাজেট টাইট, বুঝলাম! কিন্তু আমাদের Affordable কার্ড দেখলে অবাক হবেন — quality-তে কোনো compromise নেই।"
-7. ANCHOR PRICING — "Premium ৯,০০০ টাকা হলে Affordable মাত্র ৭,০০০ — প্রায় ২,০০০ টাকা বাঁচছেন!"
+1. SOCIAL PROOF — অন্যরা কিনেছে, সে-ও মিস করতে চাইবে না
+2. SCARCITY / URGENCY — সীমিত সময় বা স্টক
+3. LOSS AVERSION — না নিলে কী মিস করবে সেটা feel করাও
+4. VALUE STORYTELLING — দামের কথা সরাসরি না বলে value দিয়ে শুরু করো
+5. MICRO-COMMITMENT — ছোট ছোট "হ্যাঁ" নিতে থাকো
+6. EMPATHY FIRST — আগে সমস্যা বোঝো, তারপর solution
+7. ANCHOR PRICING — বড় দাম আগে বলো, তারপর ছোট
 
 ━━━━━ PRICE LIST (সঠিক) ━━━━━
-৫০ পিস:  Affordable=২,৭সাড়ে সাতশো বা ২,৭৫০ ৳ | Premium=৩,২৫০ ৳
+৫০ পিস:  Affordable=২,৭৫০ ৳ | Premium=৩,২৫০ ৳
 ১০০ পিস: Affordable=৪,৫০০ ৳ | Premium=৫,৫০০ ৳ (FREE নিকাহনামা 🎁)
 ২০০ পিস: Affordable=৭,০০০ ৳ | Premium=৯,০০০ ৳ (FREE নিকাহনামা 🎁)
 Advance মাত্র ৩০% → bKash/Nagad: 01682588856
 Delivery: ৫-৭ কার্যদিবস, সারা বাংলাদেশ Cash on Delivery
 
-━━━━━ CARD TYPE TRIGGER ━━━━━
-Customer "Affordable" বললে → reply-এ বলো: "এই মুহূর্তে আপনাকে একটি নমুনা পাঠাচ্ছি 💚"
-Customer "Premium" বললে → reply-এ বলো: "এই মুহূর্তে আপনাকে একটি নমুনা পাঠাচ্ছি ✨"
-Order confirm হলে → warmly congratulate করো এবং বলো টিম contact করবে`;
+━━━━━ CONVERSATION FLOW ━━━━━
+১. Warm greeting → জানো বিয়ে কবে
+২. কত পিস লাগবে → price বলো with value
+৩. Image দেখাও → "আরও দেখতে চাইলে বলুন"
+৪. Objection handle করো empathy দিয়ে
+৫. Order info নাও → close করো naturally`;
 
-// ── Gemini 1.5 Flash Free AI call ─────────────────────────────
+// ── Groq AI call ───────────────────────────────────────────
 async function getAIReply(senderId, userMessage) {
-  try {
-    const history = getHistory(senderId);
+  const history = getHistory(senderId);
 
-    // Gemini-র মেসেজ ফরম্যাটে রূপান্তর
-    const contents = [];
-    
-    // System instruction যুক্ত করার কৌশল
-    contents.push({
-      role: 'user',
-      parts: [{ text: `SYSTEM INSTRUCTION: ${SYSTEM_PROMPT}\n\nUnderstood? Respond with yes.` }]
-    });
-    contents.push({
-      role: 'model',
-      parts: [{ text: "Yes, I will strictly act as Brishti Apa from BOONDHON Printing House." }]
-    });
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'llama3-8b-8192',
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...history,
+        { role: 'user', content: userMessage }
+      ],
+      max_tokens: 350,
+      temperature: 0.85,
+    }),
+  });
 
-    // চ্যাট হিস্ট্রি অ্যাড করা
-    history.forEach(item => {
-      contents.push({
-        role: item.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: item.content }]
-      });
-    });
-
-    // বর্তমান ইউজার মেসেজ
-    contents.push({
-      role: 'user',
-      parts: [{ text: userMessage }]
-    });
-
-    const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        contents: contents,
-        generationConfig: {
-          maxOutputTokens: 250,
-          temperature: 0.7
-        }
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-        timeout: 10000
-      }
-    );
-
-    const aiText = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    return aiText || 'বিয়ের কার্ডের কি কোনো নির্দিষ্ট বাজেট আছে আপনার? আমাকে জানাতে পারেন! 🌸';
-
-  } catch (error) {
-    console.error('Gemini API Error:', error.response ? error.response.data : error.message);
-    return 'আমি আপনার মেসেজটি বুঝতে পেরেছি আপু/ভাইয়া। আমাদের কার্ডের কালেকশন দেখতে চাইলে "Affordable" বা "Premium" লিখে জানান! ✨';
-  }
+  const data = await response.json();
+  return data?.choices?.[0]?.message?.content || 'দুঃখিত, একটু সমস্যা হচ্ছে 😊';
 }
 
 // ── Meta API helpers ───────────────────────────────────────
 async function sendText(recipientId, text) {
-  try {
-    await axios.post(
-      `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-      { recipient: { id: recipientId }, message: { text } }
-    );
-  } catch (err) {
-    console.error('Meta SendText Error:', err.message);
-  }
+  await fetch(
+    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipient: { id: recipientId },
+        message: { text }
+      })
+    }
+  );
 }
 
-async function sendImage(recipientId, imageUrl) {
-  try {
-    await axios.post(
-      `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-      {
+// মেসেঞ্জারে সুন্দর সিঙ্গেল বা মাল্টিপল কার্ড (Carousel Layout) দেখানোর জন্য নতুন ফাংশন
+async function sendCarouselCard(recipientId, title, subtitle, imageUrl, buttons = []) {
+  const elements = [{
+    title: title,
+    image_url: imageUrl,
+    subtitle: subtitle,
+    buttons: buttons.map(b => ({
+      type: 'postback',
+      title: b.title,
+      payload: b.payload
+    }))
+  }];
+
+  await fetch(
+    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         recipient: { id: recipientId },
         message: {
           attachment: {
-            type: 'image',
-            payload: { url: imageUrl, is_reusable: true }
+            type: 'template',
+            payload: {
+              template_type: 'generic',
+              elements: elements
+            }
           }
         }
-      }
-    );
-  } catch (err) {
-    console.error('Meta SendImage Error:', err.message);
-  }
+      })
+    }
+  );
 }
 
 async function sendQuickReplies(recipientId, text, buttons) {
-  try {
-    await axios.post(
-      `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-      {
+  await fetch(
+    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         recipient: { id: recipientId },
         message: {
           text,
@@ -273,11 +262,9 @@ async function sendQuickReplies(recipientId, text, buttons) {
             payload: b.toUpperCase().replace(/\s+/g, '_')
           }))
         }
-      }
-    );
-  } catch (err) {
-    console.error('Meta SendQuickReplies Error:', err.message);
-  }
+      })
+    }
+  );
 }
 
 // ── Webhook ────────────────────────────────────────────────
@@ -299,11 +286,19 @@ app.post('/webhook', async (req, res) => {
   if (body.object !== 'page') return;
 
   for (const entry of body.entry) {
-    const event = entry.messaging?.[0];
-    if (!event || !event.message || event.message.is_echo) continue;
+    const event = entry.messaging[0];
+    if (!event || event.message?.is_echo) continue;
 
     const senderId = event.sender.id;
-    const userText = event.message.text;
+    
+    // মেসেজ টেক্সট অথবা পোস্টব্যাক পে-লোড রিসিভ করা
+    let userText = "";
+    if (event.message && event.message.text) {
+      userText = event.message.text;
+    } else if (event.postback && event.postback.payload) {
+      userText = event.postback.payload.replace(/_/g, ' '); // পে-লোড টেক্সটে কনভার্ট করা
+    }
+
     if (!userText) continue;
 
     try {
@@ -321,22 +316,45 @@ app.post('/webhook', async (req, res) => {
         continue;
       }
 
+      // trigger detect
       const trigger = detectTrigger(userText);
+
+      // AI reply জেনারেট করা
       const aiReply = await getAIReply(senderId, userText);
-      
       addToHistory(senderId, 'user', userText);
       addToHistory(senderId, 'assistant', aiReply);
 
-      await sendText(senderId, aiReply);
-
-      // user trigger handling
+      // ১. যদি ইউজার এফোর্ডেবল কার্ড দেখতে চায়
       if (trigger === 'affordable') {
-        await sendImage(senderId, driveUrl(randomId(AFFORDABLE_IDS)));
-        await sendText(senderId, '💚 এটি আমাদের Affordable collection-এর একটি নমুনা।\nআরও দেখতে চাইলে শুধু বলুন! 😊');
+        const imgUrl = driveUrl(randomId(AFFORDABLE_IDS));
+        await sendCarouselCard(
+          senderId, 
+          "💚 Affordable Card Collection", 
+          aiReply, // AI এর জেনারেট করা সেলস টক বাবল আলাদা না পাঠিয়ে সাবটাইটেলে ঢুকিয়ে দেওয়া হলো
+          imgUrl,
+          [
+            { title: "Premium ও দেখি ✨", payload: "PREMIUM_CARD" },
+            { title: "অর্ডার কনফার্ম করব 💍", payload: "ORDER_CONFIRM" }
+          ]
+        );
+      
+      // ২. যদি ইউজার প্রিমিয়াম কার্ড দেখতে চায়
       } else if (trigger === 'premium') {
-        await sendImage(senderId, driveUrl(randomId(PREMIUM_IDS)));
-        await sendText(senderId, '✨ এটি আমাদের Premium collection-এর একটি নমুনা।\nআরও দেখতে চাইলে শুধু বলুন! 😊');
+        const imgUrl = driveUrl(randomId(PREMIUM_IDS));
+        await sendCarouselCard(
+          senderId, 
+          "✨ Premium Card Collection", 
+          aiReply, 
+          imgUrl,
+          [
+            { title: "Affordable ও দেখি 💚", payload: "AFFORDABLE_CARD" },
+            { title: "অর্ডার কনফার্ম করব 💍", payload: "ORDER_CONFIRM" }
+          ]
+        );
+
+      // ৩. যদি অর্ডার কনফার্মেশনের কোনো কথা হয়
       } else if (trigger === 'sale') {
+        await sendText(senderId, aiReply); // সেলস কনফার্মেশনের জন্য AI এর মিষ্টি উইশ মেসেজ
         await sendText(senderId,
           '🎉 অভিনন্দন! আপনার সিদ্ধান্তটা সঠিক! 💍\n\n' +
           '📞 আমাদের টিম ১৫-৩০ মিনিটের মধ্যে যোগাযোগ করবে।\n\n' +
@@ -344,25 +362,20 @@ app.post('/webhook', async (req, res) => {
           'bKash/Nagad (Personal): 01682588856\n\n' +
           'ধন্যবাদ BOONDHON বেছে নেওয়ার জন্য! 🌸'
         );
-      }
-
-      // AI reply-তেও trigger check
-      const aiTrigger = detectTrigger(aiReply);
-      if (!trigger) {
-        if (aiTrigger === 'affordable') {
-          await sendImage(senderId, driveUrl(randomId(AFFORDABLE_IDS)));
-        } else if (aiTrigger === 'premium') {
-          await sendImage(senderId, driveUrl(randomId(PREMIUM_IDS)));
-        }
+      
+      // ৪. নরমাল কোনো কথাবার্তা হলে শুধু এআই টেক্সট যাবে
+      } else {
+        await sendText(senderId, aiReply);
       }
 
     } catch (err) {
-      console.error('Webhook processing loop error:', err);
+      console.error('Error:', err);
+      await sendText(senderId, 'দুঃখিত, একটু সমস্যা হচ্ছে। একটু পরে আবার চেষ্টা করুন 😊');
     }
   }
 });
 
-app.get('/', (req, res) => res.send('🤖 BOONDHON Bot Running on Free Gemini!'));
+app.get('/', (req, res) => res.send('🤖 BOONDHON Bot Running!'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('✅ BOONDHON Bot Server Started on port ' + PORT));
