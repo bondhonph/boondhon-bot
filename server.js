@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const axios = require('axios'); // স্টেবিলিটির জন্য axios ব্যবহার করা হয়েছে, যা 'fetch is not defined' এরর দূর করবে
 const app = express();
 app.use(express.json());
 
@@ -12,7 +13,7 @@ const AFFORDABLE_IDS = [
   "1J9_qfkIdIWL5Sc9O8EokvYlGfQWrf5TD","1cOCFSa1ap-Z54Ldf2AuoUKlEaQ5Ccql-",
   "1dbYH2L4QykEUhYXGQPzQZObEuHFdwKsT","1HJTtR-zhhg6v2ph7MikdMDWI-LWJgG0z",
   "1PRlMp4F1xnQJPURON535pl7t08_thXVA","1UEAeYYB3Bt5vMYEL-a7AcV1aV21Z04si",
-  "1-_qTV4gq0oKMdfMRxlTZL3yUO98ZGAoi","15yHXRk2mHI6-cKeooRqT20XeHubRRrPN",
+  "1-_qTV4g0oKMdfMRxlTZL3yUO98ZGAoi","15yHXRk2mHI6-cKeooRqT20XeHubRRrPN",
   "1Yrcqj5g0sZDrL3QaEkfEmKnF12BEs6ir","1vXwJ68j7x5qfpZdHkMkqLn0tvpblGDpl",
   "1GWw91oefwyYr9sHSQXjePTSX-KwPjy7I","1_tnTz7HWDf4CVJHORPlani7pjEcLdm7X",
   "1OMy_r94N_iUqvPW1t5fAGa4Sv3C_MIqF","1rXCxMziCgTImURvkahNp-AvneVljg-CW",
@@ -81,7 +82,7 @@ const PREMIUM_IDS = [
   "1C3AXVh-mfTMtcAFhrL044TvwklDIKYNa","1fZQ7kc9OkcDLMntxUqUnUh-eVfGPqfIm",
   "1Zb-AwPI5Ta8GaDX8T2QSMesenxFBEpNw","181vyiexE1YGUOav2BUEdLzWLn24qdvvm",
   "1IUCMZwe292HN-OEcdnIbvWPuwGy6bgBG","1zyZ3QVHsOkTBADMm8jxJrk2ZIiiFE87F",
-  "1vtMWO4Ah45nvFExeMq82sfZc2JRsIiHc","1S0Oefe3t9iTNkhY_kjNojyHbb7uY4qHE",
+  "1vtMWO4Ah5nvFExeMq82sfZc2JRsIiHc","1S0Oefe3t9iTNkhY_kjNojyHbb7uY4qHE",
   "1rDFVMBfbrEt76kjiJLES3bnA_jmedsyI","119JxcFfIzDClqpTEC7ekWEMEPzH4_Hth",
   "18roPGwQh8ImnrZ3ncIe8dt69JtUqrmwQ","147CRb0HLsfBA8aw9BNdO6dco7dQF6xNo",
   "1oBnPqo8kAxNk4D3cgxlJAaZGqmP5F2Mb","1NVkZtKt1EHXcCA0c_latgAtBdckWGi6t",
@@ -118,6 +119,7 @@ function addToHistory(senderId, role, content) {
 
 // ── Trigger detection ──────────────────────────────────────
 function detectTrigger(text) {
+  if (!text) return null;
   const t = text.toLowerCase();
   const affordable = ["affordable", "অ্যাফোর্ডেবল", "সাশ্রয়", "কম দাম", "affordable card", "affodable", "এফোর্ডেবল"];
   const premium = ["premium", "প্রিমিয়াম", "premium card", "প্রিমিয়াম কার্ড"];
@@ -149,122 +151,117 @@ const SYSTEM_PROMPT = `তুমি BOONDHON Printing House-এর AI Sales Agen
 - কখনো বলবে না যে তুমি AI বা bot
 
 ━━━━━ PSYCHOLOGY TECHNIQUES ━━━━━
-1. SOCIAL PROOF — অন্যরা কিনেছে, সে-ও মিস করতে চাইবে না
-2. SCARCITY / URGENCY — সীমিত সময় বা স্টক
-3. LOSS AVERSION — না নিলে কী মিস করবে সেটা feel করাও
-4. VALUE STORYTELLING — দামের কথা সরাসরি না বলে value দিয়ে শুরু করো
-5. MICRO-COMMITMENT — ছোট ছোট "হ্যাঁ" নিতে থাকো
-6. EMPATHY FIRST — আগে সমস্যা বোঝো, তারপর solution
-7. ANCHOR PRICING — বড় দাম আগে বলো, তারপর ছোট
+1. SOCIAL PROOF — গত সপ্তাহে ৩টা wedding-এ আমাদের Premium কার্ড গেছে — সবাই অবাক হয়ে গেছেন! 😊
+2. SCARCITY / URGENCY — এই মাসে slot প্রায় ভরে গেছে — আরেকটু দেরি করলে date নাও পেতে পারেন 😅
+3. LOSS AVERSION — ১০০ পিসে FREE নিকাহনামা — এটা অন্য কোথাও পাবেন না।
+4. VALUE STORYTELLING — বিয়ের কার্ড মানুষ সারাজীবন সংরক্ষণ করে। সেটা সুন্দর হলে মেহমানরা মনে রাখে।
+5. MICRO-COMMITMENT — বিয়েটা কি এ বছরের মধ্যে? 😊 → কতজন মেহমান আসছেন?
+6. EMPATHY FIRST — বাজেট টাইট, বুঝলাম! কিন্তু আমাদের Affordable কার্ড দেখলে অবাক হবেন — quality অসাধারণ।
+7. ANCHOR PRICING — Premium ৯,০০০ টাকা হলে Affordable মাত্র ৭,০০০ — প্রায় ২,০০০ টাকা বাঁচছেন!
 
 ━━━━━ PRICE LIST (সঠিক) ━━━━━
-৫০ পিস:  Affordable=২,৭৫০ ৳ | Premium=৩,২৫০ ৳
+৫০ পিস:  Affordable=২,৭েনার ৳ | Premium=৩,২৫০ ৳
 ১০০ পিস: Affordable=৪,৫০০ ৳ | Premium=৫,৫০০ ৳ (FREE নিকাহনামা 🎁)
 ২০০ পিস: Affordable=৭,০০০ ৳ | Premium=৯,০০০ ৳ (FREE নিকাহনামা 🎁)
 Advance মাত্র ৩০% → bKash/Nagad: 01682588856
 Delivery: ৫-৭ কার্যদিবস, সারা বাংলাদেশ Cash on Delivery
 
-━━━━━ CONVERSATION FLOW ━━━━━
-১. Warm greeting → জানো বিয়ে কবে
-২. কত পিস লাগবে → price বলো with value
-৩. Image দেখাও → "আরও দেখতে চাইলে বলুন"
-৪. Objection handle করো empathy দিয়ে
-৫. Order info নাও → close করো naturally`;
+━━━━━ CARD TYPE TRIGGER ━━━━━
+Customer "Affordable" বললে → reply-এ বলো: "এই মুহূর্তে আপনাকে একটি নমুনা পাঠাচ্ছি 💚"
+Customer "Premium" বললে → reply-এ বলো: "এই মুহূর্তে আপনাকে একটি নমুনা পাঠাচ্ছি ✨"
+Order confirm হলে → warmly congratulate করো এবং বলো টিম contact করবে`;
 
-// ── Groq AI call ───────────────────────────────────────────
+// ── Groq AI call (Axios Optimized) ─────────────────────────
 async function getAIReply(senderId, userMessage) {
   const history = getHistory(senderId);
-
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'llama3-8b-8192',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...history,
-        { role: 'user', content: userMessage }
-      ],
-      max_tokens: 350,
-      temperature: 0.85,
-    }),
-  });
-
-  const data = await response.json();
-  return data?.choices?.[0]?.message?.content || 'দুঃখিত, একটু সমস্যা হচ্ছে 😊';
+  try {
+    const res = await axios.post(
+      'https://api.groq.com/openai/v1/chat/completions',
+      {
+        model: 'llama3-8b-8192',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          ...history,
+          { role: 'user', content: userMessage }
+        ],
+        max_tokens: 350,
+        temperature: 0.85,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+        },
+        timeout: 12000
+      }
+    );
+    return res.data?.choices?.[0]?.message?.content || 'দুঃখিত, একটু সমস্যা হচ্ছে 😊';
+  } catch (error) {
+    console.error('Groq API Error:', error.response ? error.response.data : error.message);
+    return 'আমি আন্তরিকভাবে দুঃখিত, আমার সার্ভারে একটু লোড বেশি। আপনি কি আরেকবার একটু বলবেন? 😊';
+  }
 }
 
-// ── Meta API helpers ───────────────────────────────────────
+// ── Meta API helpers (Axios Optimized) ──────────────────────
+async function sendToMeta(body) {
+  try {
+    await axios.post(
+      `https://graph.facebook.com/v21.0/me/messages?access_token=${PAGE_TOKEN}`,
+      body,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+  } catch (error) {
+    console.error('Meta Send Error:', error.response ? error.response.data : error.message);
+  }
+}
+
 async function sendText(recipientId, text) {
-  await fetch(
-    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        recipient: { id: recipientId },
-        message: { text }
-      })
-    }
-  );
+  await sendToMeta({
+    recipient: { id: recipientId },
+    messaging_type: "RESPONSE",
+    message: { text }
+  });
 }
 
-// মেসেঞ্জারে সুন্দর সিঙ্গেল বা মাল্টিপল কার্ড (Carousel Layout) দেখানোর জন্য নতুন ফাংশন
+// মেসেঞ্জারে সুন্দর সিঙ্গেল বা মাল্টিপল কার্ড (Carousel Layout) দেখানোর জন্য ফিক্সড ফাংশন
 async function sendCarouselCard(recipientId, title, subtitle, imageUrl, buttons = []) {
-  const elements = [{
-    title: title,
-    image_url: imageUrl,
-    subtitle: subtitle,
-    buttons: buttons.map(b => ({
-      type: 'postback',
-      title: b.title,
-      payload: b.payload
-    }))
-  }];
-
-  await fetch(
-    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        recipient: { id: recipientId },
-        message: {
-          attachment: {
-            type: 'template',
-            payload: {
-              template_type: 'generic',
-              elements: elements
-            }
-          }
+  await sendToMeta({
+    recipient: { id: recipientId },
+    messaging_type: "RESPONSE",
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [{
+            title: title,
+            image_url: imageUrl,
+            subtitle: subtitle,
+            buttons: buttons.map(b => ({
+              type: 'postback',
+              title: b.title,
+              payload: b.payload
+            }))
+          }]
         }
-      })
+      }
     }
-  );
+  });
 }
 
 async function sendQuickReplies(recipientId, text, buttons) {
-  await fetch(
-    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        recipient: { id: recipientId },
-        message: {
-          text,
-          quick_replies: buttons.map(b => ({
-            content_type: 'text',
-            title: b,
-            payload: b.toUpperCase().replace(/\s+/g, '_')
-          }))
-        }
-      })
+  await sendToMeta({
+    recipient: { id: recipientId },
+    messaging_type: "RESPONSE",
+    message: {
+      text,
+      quick_replies: buttons.map(b => ({
+        content_type: 'text',
+        title: b,
+        payload: b.toUpperCase().replace(/\s+/g, '_')
+      }))
     }
-  );
+  });
 }
 
 // ── Webhook ────────────────────────────────────────────────
@@ -286,17 +283,18 @@ app.post('/webhook', async (req, res) => {
   if (body.object !== 'page') return;
 
   for (const entry of body.entry) {
+    if (!entry.messaging) continue;
     const event = entry.messaging[0];
     if (!event || event.message?.is_echo) continue;
 
     const senderId = event.sender.id;
     
-    // মেসেজ টেক্সট অথবা পোস্টব্যাক পে-লোড রিসিভ করা
+    // টেক্সট মেসেজ অথবা বাটন পোস্টব্যাক চেক
     let userText = "";
     if (event.message && event.message.text) {
       userText = event.message.text;
     } else if (event.postback && event.postback.payload) {
-      userText = event.postback.payload.replace(/_/g, ' '); // পে-লোড টেক্সটে কনভার্ট করা
+      userText = event.postback.payload.replace(/_/g, ' '); 
     }
 
     if (!userText) continue;
@@ -330,7 +328,7 @@ app.post('/webhook', async (req, res) => {
         await sendCarouselCard(
           senderId, 
           "💚 Affordable Card Collection", 
-          aiReply, // AI এর জেনারেট করা সেলস টক বাবল আলাদা না পাঠিয়ে সাবটাইটেলে ঢুকিয়ে দেওয়া হলো
+          aiReply, // AI এর সেলস টক আলাদা বাবল না পাঠিয়ে কার্ডের ভেতরে দেওয়া হলো
           imgUrl,
           [
             { title: "Premium ও দেখি ✨", payload: "PREMIUM_CARD" },
@@ -354,7 +352,7 @@ app.post('/webhook', async (req, res) => {
 
       // ৩. যদি অর্ডার কনফার্মেশনের কোনো কথা হয়
       } else if (trigger === 'sale') {
-        await sendText(senderId, aiReply); // সেলস কনফার্মেশনের জন্য AI এর মিষ্টি উইশ মেসেজ
+        await sendText(senderId, aiReply);
         await sendText(senderId,
           '🎉 অভিনন্দন! আপনার সিদ্ধান্তটা সঠিক! 💍\n\n' +
           '📞 আমাদের টিম ১৫-৩০ মিনিটের মধ্যে যোগাযোগ করবে।\n\n' +
@@ -369,8 +367,7 @@ app.post('/webhook', async (req, res) => {
       }
 
     } catch (err) {
-      console.error('Error:', err);
-      await sendText(senderId, 'দুঃখিত, একটু সমস্যা হচ্ছে। একটু পরে আবার চেষ্টা করুন 😊');
+      console.error('Webhook Runtime Error:', err);
     }
   }
 });
