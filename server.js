@@ -5,7 +5,7 @@ app.use(express.json());
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "BOONDHON_SECRET_2025";
 const PAGE_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY; 
+const GEMINI_API_KEY = AIzaSyBdAdo_U1KGexZKlGVPDEnRLGuYJGMxXTc; 
 
 // ── Google Drive Image IDs (Por por alada media block hoye jabe) ──
 const AFFORDABLE_IDS = [
