@@ -8,7 +8,7 @@ const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "BOONDHON_SECRET_2025";
 const PAGE_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
-// ── Image IDs (সবগুলো আইডি যুক্ত করা হয়েছে) ───────────────────
+// ── Image IDs ──────────────────────────────────────────────
 const AFFORDABLE_IDS = [
   "1J9_qfkIdIWL5Sc9O8EokvYlGfQWrf5TD","1cOCFSa1ap-Z54Ldf2AuoUKlEaQ5Ccql-",
   "1dbYH2L4QykEUhYXGQPzQZObEuHFdwKsT","1HJTtR-zhhg6v2ph7MikdMDWI-LWJgG0z",
@@ -82,7 +82,7 @@ const PREMIUM_IDS = [
   "1C3AXVh-mfTMtcAFhrL044TvwklDIKYNa","1fZQ7kc9OkcDLMntxUqUnUh-eVfGPqfIm",
   "1Zb-AwPI5Ta8GaDX8T2QSMesenxFBEpNw","181vyiexE1YGUOav2BUEdLzWLn24qdvvm",
   "1IUCMZwe292HN-OEcdnIbvWPuwGy6bgBG","1zyZ3QVHsOkTBADMm8jxJrk2ZIiiFE87F",
-  "1vtMWO4Ah5nvFExeMq82sfZc2JRsIiHc","1S0Oefe3t9iTNkhY_kjNojyHbb7uY4qHE",
+  "1vtMWO4Ah45nvFExeMq82sfZc2JRsIiHc","1S0Oefe3t9iTNkhY_kjNojyHbb7uY4qHE",
   "1rDFVMBfbrEt76kjiJLES3bnA_jmedsyI","119JxcFfIzDClqpTEC7ekWEMEPzH4_Hth",
   "18roPGwQh8ImnrZ3ncIe8dt69JtUqrmwQ","147CRb0HLsfBA8aw9BNdO6dco7dQF6xNo",
   "1oBnPqo8kAxNk4D3cgxlJAaZGqmP5F2Mb","1NVkZtKt1EHXcCA0c_latgAtBdckWGi6t",
@@ -139,12 +139,12 @@ function detectTrigger(text) {
 }
 
 // ── AI System Prompt ───────────────────────────────────────
-const SYSTEM_PROMPT = `তুমি BOONDHON Printing House-এর AI Sales Agent "Payel"।
+const SYSTEM_PROMPT = `তুমি BOONDHON Printing House-এর AI Sales Agent "Brishti Apa"।
 তুমি একজন experienced, emotionally intelligent Bangladeshi sales executive।
 তোমার কাজ: conversation-এর মাধ্যমে customer-কে naturally sale-এ নিয়ে আসা।
 
 ━━━━━ তোমার PERSONALITY ━━━━━
-- উষ্ণ, আন্তরিক, বন্ধুত্বপূর্ণ — যেন পরিচিত বড় বোন
+- warmth, আন্তরিকতা, বন্ধুত্বপূর্ণ — যেন পরিচিত বড় বোন
 - কখনো pushy বা desperate মনে হবে না
 - confident কিন্তু humble
 - সবসময় বাংলায় কথা বলো (natural colloquial style)
@@ -153,7 +153,7 @@ const SYSTEM_PROMPT = `তুমি BOONDHON Printing House-এর AI Sales Agen
 - কখনো বলবে না যে তুমি AI বা bot
 
 ━━━━━ PRICE LIST (সঠিক) ━━━━━
-৫০ পিস:  Affordable=২,৭৫০ ৳ | Premium=৩,২৫০ ৳
+৫০ পিস:  Affordable=২,৭ ১৫০ ৳ | Premium=৩,২৫০ ৳
 ১০০ পিস: Affordable=৪,৫০০ ৳ | Premium=৫,৫০০ ৳ (FREE নিকাহনামা 🎁)
 ২০০ পিস: Affordable=৭,০০০ ৳ | Premium=৯,০০০ ৳ (FREE নিকাহনামা 🎁)
 Advance মাত্র ৩০% → bKash/Nagad: 01682588856
@@ -217,7 +217,6 @@ async function sendText(recipientId, text) {
 
 // ── 🎠 Carousel Selector (১০টি ইমেজ পাঠাবে একসাথে) ─────────────
 async function sendCarousel(recipientId, cardType, imageIds) {
-  // ফেসবুক মেসেঞ্জারের সর্বোচ্চ লিমিট ১০টি এলিমেন্ট সিলেক্ট করা হচ্ছে
   const selectedIds = getRandomElements(imageIds, 10); 
   
   const elements = selectedIds.map((id, index) => ({
