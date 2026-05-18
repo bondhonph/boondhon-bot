@@ -3,10 +3,10 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
-const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "BOONDHON_SECRET_2025";
+const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "BOONDHON_SECRET_2026";
 const PAGE_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
-// ── ✅ আপনার দেওয়া Gemini API Key এখানে ডিফল্ট হিসেবে যুক্ত করা হয়েছে ──
+// ── 🔑 Gemini API Key ──────────────────────────────────────
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyB4dAdo_U1k5mxZK1GVPDEnRLGuYJGXxTC";
 
 // ── 🌸 Google Drive Image IDs (BOONDHON FULL COLLECTION - ALL 83 UNIQUE IDS) ──
@@ -135,7 +135,7 @@ function scheduleFollowUps(senderId) {
   clearFollowUps(state);
 
   const intervals = [
-    { time: 60 * 60 * 1000, msg: "Hi ভাইয়া/আপু! 😊 আপনার ওয়েডিং কার্ডের অর্ডারটি কি কনফার্ম করব? আমাদের স্টক সীমিত, তাই দ্রুত জানালে ভালো হয়! 🛍️" },
+    { time: 60 * 60 * 1000, msg: "Hi ভাইয়া/আপু! 😊 আপনার ওয়েডিংカードের অর্ডারটি কি কনফার্ম করব? আমাদের স্টক সীমিত, তাই দ্রুত জানালে ভালো হয়! 🛍️" },
     { time: 2 * 60 * 60 * 1000, msg: "কোনো ডিজাইন কি পছন্দ হয়েছে আপু/ভাইয়া? 💖 কোনো কাস্টমাইজেশন লাগলে আমাদের জানাতে পারেন কিন্তু! ✨" },
     { time: 6 * 60 * 60 * 1000, msg: "শুভ দিন! 🌸 বিয়ের কার্ডের অর্ডারটি আজই কনফার্ম করলে দ্রুত ডেলিভারি পেয়ে যেতেন। আপনার সিদ্ধান্তের অপেক্ষায় রইলাম! 🥰" },
     { time: 24 * 60 * 60 * 1000, msg: "আসসালামু আলাইকুম ভাইয়া/আপু। 💌 BOONDHON-এর সাথে যোগাযোগ করার জন্য আপনাকে অনেক ধন্যবাদ। কোনো হেল্প লাগলে জানাবেন, ভালো থাকবেন! 🙏❤️" }
@@ -158,19 +158,19 @@ function detectTrigger(text) {
   
   const affordable = ["affordable", "অ্যাফোর্ডেবল", "সাশ্রয়", "কম দাম", "affordable card", "affodable", "এফোর্ডেবল", "affordable কালেকশন"];
   const premium = ["premium", "প্রিমিয়াম", "premium card", "প্রিমিয়াম কার্ড", "premium কালেকশন"];
-  const price = ["দাম", "প্রাইস", "price", "অফার", "দাম ও অফার", "eita koto tk", "koto tk", "কত টাকা", "কত"];
-  const delivery = ["ডেলিভারি", "কারখানা", "delivery", "অফিস", "ঠিকানা"];
-  const selectBangla = ["বাংলা", "bangla", "বাংলা ফর্ম"];
-  const selectEnglish = ["english", "ইংরেজি", "english form"];
-  const stopImages = ["না", "লাগবে না", "no", "stop", "আর দিও না"];
-  const continueImages = ["হ্যাঁ", "দাও", "yes", "বাকিগুলো দাও", "পাঠাও"];
+  const price = ["দাম", "প্রাইস", "price", "অফার", "দাম ও অফার", "eita koto tk", "koto tk", "কত টাকা", "কত", "দাম ও স্পেশাল অফার"];
+  const delivery = ["ডেলিভারি", "কারখানা", "delivery", "অফিস", "ঠিকানা", "কারখানা ও ডেলিভারি", "পলিসি ও ঠিকানা"];
+  const selectBangla = ["বাংলা", "bangla", "বাংলা ফর্ম", "🇧🇩 বাংলায় ইনফো ফর্ম"];
+  const selectEnglish = ["english", "ইংরেজি", "english form", "🇬🇧 english form"];
+  const stopImages = ["না", "লাগবে না", "no", "stop", "আর দিও না", "🙅 না, আর লাগবে না"];
+  const continueImages = ["হ্যাঁ", "দাও", "yes", "বাকিগুলো দাও", "পাঠাও", "👍 হ্যাঁ, বাকিগুলো দাও"];
   
   const priceObjection = [
     "দামী", "অনেক দাম", "রাখেন", "নিব না", "expensive", "বেশি", "কম রাখেন", 
     "বাজেটে নাই", "বাজেট নাই", "ডিসকাউন্ট দেন", "ছাড় দেন", "বেশি দাম", "কম নাই"
   ];
   
-  const sale = ["অর্ডার কনফার্ম", "order confirm", "কনফার্ম করলাম", "নিব", "নেব", "অর্ডার করব", "অর্ডার দিতে চাই", "কনফার্ম", "order krbo kivsbe", "order kivabe"];
+  const sale = ["অর্ডার কনফার্ম", "order confirm", "কনফার্ম করলাম", "নিব", "নেব", "অর্ডার করব", "অর্ডার দিতে চাই", "কনফার্ম", "order krbo kivsbe", "order kivabe", "এখনই অর্ডার করুন"];
 
   if (sale.some(w => t.includes(w))) return "sale";
   if (priceObjection.some(w => t.includes(w))) return "price_objection";
@@ -290,12 +290,12 @@ async function getGeminiReply(senderId, userMessage) {
     "২. প্রাইস রুলস:\n" +
     "   - ৫০ পিস: Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n" +
     "   - ১০০ পিস: Premium = ৫,৫০০ টাকা | Affordable = ৪,৫০০ টাকা\n" +
-    "   - ۲۰۰ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n" +
+    "   - ২০০ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n" +
     "   - অফার: কেবল ২০০ পিস বা তার বেশি নিলে 'FREE আকদনামা' অফার প্রযোজ্য।\n" +
     "৩. দাম নিয়ে আপত্তি হ্যান্ডেলিং (সাইকোলজিক্যাল ডিফেন্স):\n" +
     "   - কাস্টমার প্রথমবার দাম বেশি বললে সহজে দাম কমাবে না। বলবে যে আমাদের মেটেরিয়াল ও ফেইল প্রিন্টিং কোয়ালিটি বাজারের সাধারণ কার্ডের চেয়ে অনেক প্রিমিয়াম, তাই লাইফটাইম মেমোরি হিসেবে এটা সেরা ডিল।\n" +
     "   - যদি তারা ১০০ পিস বা তার কম নিতে চায়, তবে অফার পুশ করবে যে ২০০ পিস নিলে ১,০০০ টাকা মূল্যের একটি আকদনামা একদম ফ্রি পাওয়া যাবে, যাতে আদতে লাভ কাস্টমারের বেশি।\n" +
-    "   - নিজে থেকে কখনো ৫ টাকা ডিসকাউন্টের बात বলবে না, যদি না সিস্টেম তোমাকে আলাদা ডিরেকশন দেয়।\n" +
+    "   - নিজে থেকে কখনো ৫ টাকা ডিসকাউন্টের কথা বলবে না, যদি না সিস্টেম তোমাকে আলাদা ডিরেকশন দেয়।\n" +
     "৪. ২০ পিসের সিক্রেট রুল: নিজে থেকে কখনো ২০ পিসের কথা বলবে না। কেউ খুব জোর করলে কেবল বলবে: '২০ পিস = ১,৫০০ টাকা।'\n" +
     "৫. কাস্টমার যদি 'Eita koto tk' বা 'Price' অথবা 'order krbo kivsbe' লেখে, তবে তুমি তাকে সরাসরি রেসপন্স করার পাশাপাশি বলবে নিচের বাটনগুলো সিলেক্ট করতে।";
 
@@ -342,39 +342,11 @@ app.post('/webhook', async (req, res) => {
     
     if (!userText) continue;
 
-    if (state.isSendingImages) {
-      state.isSendingImages = false; 
-      const aiReply = await getGeminiReply(senderId, userText);
-      
-      try {
-        await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            recipient: { id: senderId },
-            message: {
-              attachment: {
-                type: "template",
-                payload: {
-                  template_type: "button",
-                  text: `${aiReply}\n\n💖 ভাইয়া/আপু, বাকি কার্ডের ডিজাইনগুলো কি এখন পাঠাব?`,
-                  buttons: [
-                    { type: "postback", title: "👍 হ্যাঁ, বাকিগুলো দাও", payload: "continue_images" },
-                    { type: "postback", title: "🙅 না, আর লাগবে না", payload: "stop_images" }
-                  ]
-                }
-              }
-            }
-          })
-        });
-      } catch (e) {
-        console.error(e);
-      }
-      continue;
-    }
+    // 🔥 HIGH PRIORITY FIX: Check trigger FIRST before interrupting any image session or Gemini routing
+    const trigger = detectTrigger(userText);
 
-    try {
-      const trigger = detectTrigger(userText);
+    if (trigger) {
+      state.isSendingImages = false; // Stop image streaming if user interacts with a system button
 
       if (trigger === 'stop_images') {
         await sendVerticalMainMenu(senderId, "ঠিক আছে ভাইয়া/আপু, আপনার পছন্দমতো যেকোনো সাহায্য লাগলে জানাবেন। 🥰 আমরা কি তাহলে এই ডিজাইনগুলোর মধ্যেই অর্ডার ফাইনাল করব? 🛍️");
@@ -443,7 +415,7 @@ app.post('/webhook', async (req, res) => {
         else if (state.priceObjectionCount >= 3 && !state.hasOfferedDiscount) {
           state.hasOfferedDiscount = true;
           const discountText = 
-            '🌸 ভাইয়া/আপু, আপনার বিয়ের সুন্দর মুহূর্তটিকে আনন্দময় করতে আমাদের ম্যানেজমেন্ট থেকে একটি অত্যন্ত স্পেশাল পারমিশন নিলাম! 🥰\n\n' +
+            '🌸 ভাইয়া/আপু, আপনার বিয়ের সুন্দর মুহূর্তটিকে আনন্দময় করতে আমাদের আমাদের ম্যানেজমেন্ট থেকে একটি অত্যন্ত স্পেশাল পারমিশন নিলাম! 🥰\n\n' +
             'আপনার বাজেটকে সম্মান জানিয়ে শুধুমাত্র আপনার অর্ডারটির জন্য প্রতি পিস কার্ডে **৫ টাকা করে স্পেশাল ডিসকাউন্ট** দেওয়া যাবে! 🥳\n\n' +
             '💰 আমাদের হাই-কোয়ালিটি প্রিমিয়াম কার্ডের এই ওয়ান-টাইম স্পেশাল প্রাইসে অর্ডারটি কি তাহলে এখন কনফার্ম করে দেব ভাইয়া/আপু? 🛍️';
           
@@ -524,24 +496,55 @@ app.post('/webhook', async (req, res) => {
         scheduleFollowUps(senderId);
         continue;
       }
-
-      const aiReply = await getGeminiReply(senderId, userText);
-      state.history.push({ role: 'user', content: userText });
-      state.history.push({ role: 'model', content: aiReply });
-      
-      while (state.history.length > 10) {
-        state.history.shift();
-      }
-
-      await sendVerticalMainMenu(senderId, aiReply);
-      scheduleFollowUps(senderId);
-
-    } catch (err) {
-      console.error('Webhook Main Error:', err);
     }
+
+    // ── 🤖 Gemini AI Mid-stream Interrupt Fallback ──
+    if (state.isSendingImages) {
+      state.isSendingImages = false; 
+      const aiReply = await getGeminiReply(senderId, userText);
+      
+      try {
+        await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recipient: { id: senderId },
+            message: {
+              attachment: {
+                type: "template",
+                payload: {
+                  template_type: "button",
+                  text: `${aiReply}\n\n💖 ভাইয়া/আপু, বাকি কার্ডের ডিজাইনগুলো কি এখন পাঠাব?`,
+                  buttons: [
+                    { type: "postback", title: "👍 হ্যাঁ, বাকিগুলো দাও", payload: "continue_images" },
+                    { type: "postback", title: "🙅 না, আর লাগবে না", payload: "stop_images" }
+                  ]
+                }
+              }
+            }
+          })
+        });
+      } catch (e) {
+        console.error(e);
+      }
+      continue;
+    }
+
+    // ── 🗣️ Standard Natural Conversation Chat Engine ──
+    const aiReply = await getGeminiReply(senderId, userText);
+    state.history.push({ role: 'user', content: userText });
+    state.history.push({ role: 'model', content: aiReply });
+    
+    while (state.history.length > 10) {
+      state.history.shift();
+    }
+
+    await sendVerticalMainMenu(senderId, aiReply);
+    scheduleFollowUps(senderId);
   }
 });
 
+// ── Verification Endpoint ──────────────────────────────────
 app.get('/webhook', (req, res) => {
   if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
     res.status(200).send(req.query['hub.challenge']);
@@ -551,4 +554,4 @@ app.get('/webhook', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('🚀 BOONDHON Engine Active with Fallback API Key!'));
+app.listen(PORT, () => console.log('🚀 BOONDHON Engine Active and Optimized!'));
