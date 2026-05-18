@@ -273,13 +273,13 @@ async function getGeminiReply(senderId, userMessage) {
     `২. প্রাইস রুলস:\n` +
     `   - ৫০ পিস: Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n` +
     `   - ১০০ পিস: Premium = ৫,৫০০ টাকা | Affordable = ৪,৫০০ টাকা\n` +
-    `   - ۲۰۰ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n` +
+    `   - ২০০ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n` +
     `   - অফার: কেবল ২০০ পিস বা তার বেশি নিলে "FREE আকদনামা" অফার প্রযোজ্য।\n` +
     `৩. দাম নিয়ে আপত্তি হ্যান্ডেলিং (সাইকোলজিক্যাল ডিফেন্স):\n` +
     `   - কাস্টমার প্রথমবার দাম বেশি বললে সহজে দাম কমাবে না। বলবে যে আমাদের মেটেরিয়াল ও ফয়েল প্রিন্টিং কোয়ালিটি বাজারের সাধারণ কার্ডের চেয়ে অনেক প্রিমিয়াম, তাই লাইফটাইম মেমোরি হিসেবে এটা সেরা ডিল।\n` +
     `   - যদি তারা ১০০ পিস বা তার কম নিতে চায়, তবে অফার পুশ করবে যে ২০০ পিস নিলে ১,০০০ টাকা মূল্যের একটি আকদনামা একদম ফ্রি পাওয়া যাবে, যাতে আদতে লাভ কাস্টমারের বেশি।\n` +
     `   - নিজে থেকে কখনো ৫ টাকা ডিসকাউন্টের কথা বলবে না, যদি না সিস্টেম তোমাকে আলাদা ডিরেকশন দেয়।\n` +
-    `４. ২০ পিসের সিক্রেট রুল: নিজে থেকে কখনো ২০ পিসের কথা বলবে না। কেউ খুব জোর করলে কেবল বলবে: "২০ পিস = ১,৫০০ টাকা।"`;
+    `৪. ২০ পিসের সিক্রেট রুল: নিজে থেকে কখনো ২০ পিসের কথা বলবে না। কেউ খুব জোর করলে কেবল বলবে: "২০ পিস = ১,৫০০ টাকা।"`;
 
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -387,7 +387,7 @@ app.post('/webhook', async (req, res) => {
           '💰 *BOONDHON বিয়ের কার্ডের আকর্ষণীয় প্রাইস লিস্ট:* 🌸\n\n' +
           '• *৫০ পিস:* Premium = ৩,২৫০ টাকা 👑 | Affordable = ২,৭৫০ টাকা ✨\n' +
           '• *১০০ পিস:* Premium = ৫,৫০০ টাকা 👑 | Affordable = ৪,৫০০ টাকা ✨\n' +
-          '• *২০0 পিস:* Premium = ৯,০০০ টাকা 👑 | Affordable = ৭,০০০ টাকা ✨\n\n' +
+          '• *২০০ পিস:* Premium = ৯,০০০ টাকা 👑 | Affordable = ৭,০০০ টাকা ✨\n\n' +
           '🎁 *ধামাকা অফার:* ২০০ পিস বা তার বেশি কার্ড অর্ডার করলেই পাচ্ছেন একটি চমৎকার ডিজিটাল আকদনামা/নিকাহনামা একদম *FREE*! 🥰\n\n' +
           '🛍️ ভাইয়া/আপু, আপনার কত পিস কার্ড প্রয়োজন? আজই অর্ডার কনফার্ম করলে দ্রুত কাজ শুরু করতে পারব! ✨';
         
@@ -400,9 +400,127 @@ app.post('/webhook', async (req, res) => {
         const deliveryText = 
           '🚚 *ডেলিভারি, office ও কারখানা পলিসি:* 🏭\n\n' +
           '📍 *আমাদের প্রধান অফিস:* মানিকগঞ্জ।\n' +
-          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, লালবাগকেল্লা, এবং বাংলাবাজার।\n\n' +
+          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, लालবাগকেল্লা, এবং বাংলাবাজার।\n\n' +
           '📦 *সংগ্রহ করার নিয়ম:* কুরিয়ার সার্ভিসের মাধ্যমে দেশের যেকোনো প্রান্ত থেকে আপনি ক্যাশ অন ডেলিভারিতে প্রোডাক্ট নিতে পারবেন। এছাড়া সরাসরি মানিকগঞ্জ অফিস অথবা ঢাকার কারখানা থেকেও নিজে এসে সংগ্রহ করা সম্ভব। 🥰\n\n' +
           '⚠️ *বিশেষ শর্ত:* আমাদের কার্ডের ক্যাটাগরি ও ডিজাইন অনুযায়ী প্রিন্টিং কারখানা আলাদা হয়ে থাকে। তাই সরাসরি এসে সংগ্রহ করতে চাইলে, অর্ডার চূড়ান্ত হওয়ার পর আমাদের কাস্টমার সাপোর্ট টিম আপনাকে নির্দিষ্ট ফ্যাক্টরির লোকেশন কনফর্ম করে দেবে। ✨\n\n' +
           '🛍️ তাহলে ভাইয়া/আপু, আপনার পছন্দের ডিজাইনটি দিয়ে কি আজই অর্ডার বুক করে দেব? 🥰';
         
-        await sendVerticalMainMenu
+        await sendVerticalMainMenu(senderId, deliveryText);
+        scheduleFollowUps(senderId);
+        continue;
+      }
+
+      if (trigger === 'price_objection') {
+        state.priceObjectionCount += 1;
+
+        if (state.priceObjectionCount < 3 && !state.hasOfferedDiscount) {
+          const aiDefenseReply = await getGeminiReply(senderId, userMessage);
+          await sendVerticalMainMenu(senderId, aiDefenseReply);
+          scheduleFollowUps(senderId);
+          continue;
+        } 
+        else if (state.priceObjectionCount >= 3 && !state.hasOfferedDiscount) {
+          state.hasOfferedDiscount = true;
+          const discountText = 
+            '🌸 ভাইয়া/আপু, আপনার বিয়ের সুন্দর মুহূর্তটিকে আনন্দময় করতে আমাদের ম্যানেজমেন্ট থেকে একটি অত্যন্ত স্পেশাল পারমিশন নিলাম! 🥰\n\n' +
+            'আপনার বাজেটকে সম্মান জানিয়ে শুধুমাত্র আপনার অর্ডারটির জন্য প্রতি পিস কার্ডে **৫ টাকা করে স্পেশাল ডিসকাউন্ট** দেওয়া যাবে! 🥳\n\n' +
+            '💰 আমাদের হাই-কোয়ালিটি প্রিমিয়াম কার্ডের এই ওয়ান-টাইম স্পেশাল প্রাইসে অর্ডারটি কি তাহলে এখন কনফার্ম করে দেব ভাইয়া/আপু? 🛍️';
+          
+          await sendVerticalMainMenu(senderId, discountText);
+          scheduleFollowUps(senderId);
+          continue;
+        } 
+        else {
+          await sendVerticalMainMenu(senderId, "আহারে ভাইয়া/আপু! 😭 আমাদের মেটেরিয়ালস ও প্রিন্টিং কোয়ালিটি ১০০% এক্সক্লুসিভ হওয়ায় এর চেয়ে কম করলে আমাদের একদম লস হয়ে যাবে। BOONDHON-এর সাথে যোগাযোগ করার জন্য আপনাকে অনেক অনেক ধন্যবাদ! ভালো থাকবেন। 🙏❤️");
+          continue; 
+        }
+      }
+
+      if (trigger === 'sale') {
+        const orderRules = 
+          '📋 *সহজ উপায়ে অর্ডার করার নিয়মাবলী:* 🌸\n\n' +
+          '১. *অ্যাডভান্স পেমেন্ট:* অর্ডার কনফার্ম করতে টোটাল বিলের ৩০% অ্যাডভান্স পেমেন্ট করতে হবে। বিকাশ/নগদ/রকেট (পার্সোনাল): 📱 *01682588856*\n' +
+          '২. *ডিজাইন প্রক্রিয়া:* পেমেন্টের পর আমাদের এক্সপার্ট ডিজাইনার আপনার দেওয়া তথ্য দিয়ে কার্ডের ডেমো ডিজাইন তৈরি করে ইনবক্সে দেখাবে। আপনি দেখে চূড়ান্ত করার পরই প্রিন্টিং শুরু হবে! 🥰\n' +
+          '৩. *ডেলিভারি:* জেলা শহরে বাকি ৭০% টাকা ক্যাশ অন ডেলিভারিতে সুন্দরবন/ইউনিক কুরিয়ারে দেওয়া যাবে। সময় লাগবে ৫-৭ কর্মদিবস। 🚚\n\n' +
+          '👇 অর্ডার প্রসেসটি ঝটপট এগিয়ে নিতে আপনার কার্ডের কাঙ্ক্ষিত ভাষা সিলেক্ট করুন: ✨';
+
+        await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recipient: { id: senderId },
+            message: {
+              attachment: {
+                type: "template",
+                payload: {
+                  template_type: "button",
+                  text: orderRules,
+                  buttons: [
+                    { type: "postback", title: "🇧🇩 বাংলায় ইনফো ফর্ম", payload: "bangla_form" },
+                    { type: "postback", title: "🇬🇧 English Form", payload: "english_form" }
+                  ]
+                }
+              }
+            }
+          })
+        });
+        continue;
+      }
+
+      if (trigger === 'bangla_form') {
+        const banglaForm =
+          '📝 *বিয়ের কার্ডের বাংলা ফর্ম:* 🌸\n\n' +
+          '• বর- নামঃ | পিতাঃ | মাতাঃ | ঠিকানাঃ\n' +
+          '• কণে- নামঃ | পিতাঃ | মাতাঃ | ঠিকানাঃ\n\n' +
+          '• গায়ে হলুদ- তারিখ: | রোজ: | সময়: | স্থান:\n' +
+          '• শুভ বিবাহ- তারিখ: | রোজ: | বরযাত্রা সময়: | স্থান:\n' +
+          '• বৌ-ভাত- তারিখ: | রোজ: | সময়: | স্থান:\n\n' +
+          '📞 প্রয়োজনে (ফোন নম্বর) / শুভেচ্ছান্তে-\n' +
+          '-------\n' +
+          '❓ CARDটি ছেলের পক্ষ নাকি মেয়ের পক্ষ হতে?\n' +
+          '🚚 কুরিয়ার ইনফরমেশন (নাম, মোবাইল, ঠিকানা):\n\n' +
+          '_(নোট: ফর্মটি কপি করে ফিলাপ করে ঝটপট পাঠিয়ে দিন এবং সেলস কনফার্ম করুন ভাইয়া/আপু! 🥰)_';
+
+        await sendVerticalMainMenu(senderId, banglaForm);
+        scheduleFollowUps(senderId);
+        continue;
+      }
+
+      if (trigger === 'english_form') {
+        const englishForm =
+          '📝 *Wedding Card English Form:* ✨\n\n' +
+          '• Groom Name:\n• Father & Mother Name:\n\n' +
+          '• Bride Name:\n• Father & Mother Name:\n\n' +
+          '• Programme (Holud / Wedding / Reception)\n• Day: | Date: | Time: | Venue:\n\n' +
+          '🚚 Courier Info (Name, Mobile, Address):\n\n' +
+          '_(Note: Please copy, fill up and send it back to lock your order now! 🥰)_';
+
+        await sendVerticalMainMenu(senderId, englishForm);
+        scheduleFollowUps(senderId);
+        continue;
+      }
+
+      const aiReply = await getGeminiReply(senderId, userText);
+      state.history.push({ role: 'user', content: userText });
+      state.history.push({ role: 'model', content: aiReply });
+      if (state.history.length > 10) state.history.shift();
+
+      await sendVerticalMainMenu(senderId, aiReply);
+      scheduleFollowUps(senderId);
+
+    } catch (err) {
+      console.error('Webhook Main Error:', err);
+    }
+  }
+});
+
+app.get('/webhook', (req, res) => {
+  if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
+    res.status(200).send(req.query['hub.challenge']);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('🚀 BOONDHON Multi-Defense Psychology Engine Fixed & Live!'));
