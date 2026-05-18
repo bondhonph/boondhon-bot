@@ -5,7 +5,9 @@ app.use(express.json());
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "BOONDHON_SECRET_2025";
 const PAGE_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-const GEMINI_API_KEY = "AIzaSyB4dAdo_U1k5mxZK1GVPDEnRLGuYJGXxTC";
+
+// ── ✅ আপনার দেওয়া Gemini API Key এখানে ডিফল্ট হিসেবে যুক্ত করা হয়েছে ──
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyB4dAdo_U1k5mxZK1GVPDEnRLGuYJGXxTC";
 
 // ── 🌸 Google Drive Image IDs (BOONDHON FULL COLLECTION - ALL 83 UNIQUE IDS) ──
 const AFFORDABLE_IDS = [ 
@@ -93,7 +95,7 @@ const PREMIUM_IDS = [
   "1J2_PY_Rk-x5ipzl_Ur5unrWCx2ZN7LvR","184YPeKcI8ilthW2VPvTcnJSTebj335-c", 
   "1-7lrprKPJQ-JuiNVi_bUdzHr_7S0NmNn","1ZAk92jKEyUhpO_faXYdbz5PPXkmo5YQN", 
   "1_9oor-2oJ4dHHOBkERAije6pvr8zAqPJ","1MX7rnQG2F0H8UX5ofGazO53knl7SUNE1", 
-  "148EhK2GqvlP8Z-X-pK4Cp-Zb_sXqBLAu","1EuLjjvKMWIMkgbnK5PKOsKC5kHEG5H11" 
+  "148EhK2GqvlP8Z-X-pK4Cp-Zb_sXqBLAu","1EuLjjvKMWIMkgbnK5PKOsKC5kHE5H11" 
 ];
 
 function driveUrl(id) {
@@ -183,7 +185,7 @@ function detectTrigger(text) {
   return null;
 }
 
-// ── Messenger PURE VERTICAL Buttons ────────────────────────
+// ── Messenger PURE VERTICAL Buttons (Fixed 20-Char Titles) ──
 async function sendVerticalMainMenu(recipientId, mainText) {
   try {
     await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
@@ -198,9 +200,9 @@ async function sendVerticalMainMenu(recipientId, mainText) {
               template_type: "button",
               text: mainText,
               buttons: [
-                { type: "postback", title: "🌸 Affordable কালেকশন", payload: "affordable" },
-                { type: "postback", title: "✨ Premium কালেকশন", payload: "premium" },
-                { type: "postback", title: "💰 দাম ও স্পেশাল অফার", payload: "price" }
+                { type: "postback", title: "🌸 Affordable কার্ড", payload: "affordable" },
+                { type: "postback", title: "✨ Premium কার্ড", payload: "premium" },
+                { type: "postback", title: "💰 দাম ও অফার", payload: "price" }
               ]
             }
           }
@@ -220,7 +222,7 @@ async function sendVerticalMainMenu(recipientId, mainText) {
               template_type: "button",
               text: "🚚 আমাদের পলিসি ও অর্ডার লিংক নিচে দেখুন: 👇",
               buttons: [
-                { type: "postback", title: "🏢 কারখানা ও ডেলিভারি", payload: "delivery" },
+                { type: "postback", title: "🚚 পলিসি ও ঠিকানা", payload: "delivery" },
                 { type: "postback", title: "🛍️ এখনই অর্ডার করুন", payload: "sale" }
               ]
             }
@@ -233,7 +235,7 @@ async function sendVerticalMainMenu(recipientId, mainText) {
   }
 }
 
-// ── Controlled Image Sender (Interruptible) ─────────────────
+// ── Controlled Image Sender (Enhanced Loop Breaker) ─────────────────
 async function sendImagesStream(senderId, startIndex = 0) {
   const state = getUserState(senderId);
   const ids = state.imageType === 'premium' ? PREMIUM_IDS : AFFORDABLE_IDS;
@@ -258,11 +260,18 @@ async function sendImagesStream(senderId, startIndex = 0) {
     } catch (e) {
       console.error('Error sending image:', e);
     }
+
     await new Promise(resolve => setTimeout(resolve, 850)); 
+    if (!state.isSendingImages) {
+      state.lastImageIndex = i + 1;
+      return;
+    }
   }
 
-  state.isSendingImages = false;
-  await sendVerticalMainMenu(senderId, "✨ সবগুলো জমকালো ডিজাইন পাঠানো শেষ হয়েছে ভাইয়া/আপু! 🥰 আপনার কোনটি সবচেয়ে বেশি পছন্দ হয়েছে? আমরা কি অর্ডারটি কনফার্ম করব? 🛍️");
+  if (state.isSendingImages) {
+    state.isSendingImages = false;
+    await sendVerticalMainMenu(senderId, "✨ সবগুলো জমকালো ডিজাইন পাঠানো শেষ হয়েছে ভাইয়া/আপু! 🥰 আপনার কোনটি সবচেয়ে বেশি পছন্দ হয়েছে? আমরা কি অর্ডারটি কনফার্ম করব? 🛍️");
+  }
 }
 
 // ── Gemini AI Engine (Smart Response & Dynamic Tone) ────────
@@ -277,16 +286,16 @@ async function getGeminiReply(senderId, userMessage) {
   const systemInstructionText = 
     "তুমি BOONDHON Printing House-এর AI Sales Agent 'Brishti Apa'।\n" +
     "━━━━━ বিজনেস গাইডলাইন ━━━━━\n" +
-    "১. টোন: অত্যন্ত মিষ্টি, আন্তরিক ও সেলস ক্লোজিংমুখী। প্রচুর সুন্দর সুন্দর ইমোজি (🌸, ✨, 💰, 🛍️, 🥰) ব্যবহার করবে।\n" +
+    "১. টোন: অত্যন্ত মিষ্টি, আন্তরিক ও সেলস ক্লোজিংমুখী। প্রচুর সুন্দর সুন্দর ইমোজি (🌸, ✨, 💰, 🛍️, 🥰) ব্যবহার করবে。\n" +
     "২. প্রাইস রুলস:\n" +
     "   - ৫০ পিস: Premium = ৩,২৫০ টাকা | Affordable = ২,৭৫০ টাকা\n" +
     "   - ১০০ পিস: Premium = ৫,৫০০ টাকা | Affordable = ৪,৫০০ টাকা\n" +
-    "   - ২০০ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n" +
+    "   - ۲۰۰ পিস: Premium = ৯,০০০ টাকা | Affordable = ৭,০০০ টাকা\n" +
     "   - অফার: কেবল ২০০ পিস বা তার বেশি নিলে 'FREE আকদনামা' অফার প্রযোজ্য।\n" +
     "৩. দাম নিয়ে আপত্তি হ্যান্ডেলিং (সাইকোলজিক্যাল ডিফেন্স):\n" +
-    "   - কাস্টমার প্রথমবার দাম বেশি বললে সহজে দাম কমাবে না। বলবে যে আমাদের মেটেরিয়াল ও ফয়েল প্রিন্টিং কোয়ালিটি বাজারের সাধারণ কার্ডের চেয়ে অনেক প্রিমিয়াম, তাই লাইফটাইম মেমোরি হিসেবে এটা সেরা ডিল।\n" +
+    "   - কাস্টমার প্রথমবার দাম বেশি বললে সহজে দাম কমাবে না। বলবে যে আমাদের মেটেরিয়াল ও ফেইল প্রিন্টিং কোয়ালিটি বাজারের সাধারণ কার্ডের চেয়ে অনেক প্রিমিয়াম, তাই লাইফটাইম মেমোরি হিসেবে এটা সেরা ডিল।\n" +
     "   - যদি তারা ১০০ পিস বা তার কম নিতে চায়, তবে অফার পুশ করবে যে ২০০ পিস নিলে ১,০০০ টাকা মূল্যের একটি আকদনামা একদম ফ্রি পাওয়া যাবে, যাতে আদতে লাভ কাস্টমারের বেশি।\n" +
-    "   - নিজে থেকে কখনো ৫ টাকা ডিসকাউন্টের কথা বলবে না, যদি না সিস্টেম তোমাকে আলাদা ডিরেকশন দেয়।\n" +
+    "   - নিজে থেকে কখনো ৫ টাকা ডিসকাউন্টের बात বলবে না, যদি না সিস্টেম তোমাকে আলাদা ডিরেকশন দেয়।\n" +
     "৪. ২০ পিসের সিক্রেট রুল: নিজে থেকে কখনো ২০ পিসের কথা বলবে না। কেউ খুব জোর করলে কেবল বলবে: '২০ পিস = ১,৫০০ টাকা।'\n" +
     "৫. কাস্টমার যদি 'Eita koto tk' বা 'Price' অথবা 'order krbo kivsbe' লেখে, তবে তুমি তাকে সরাসরি রেসপন্স করার পাশাপাশি বলবে নিচের বাটনগুলো সিলেক্ট করতে।";
 
@@ -333,7 +342,6 @@ app.post('/webhook', async (req, res) => {
     
     if (!userText) continue;
 
-    // ইমেজ পাঠানোর সময় ইন্টারাপ্ট
     if (state.isSendingImages) {
       state.isSendingImages = false; 
       const aiReply = await getGeminiReply(senderId, userText);
@@ -413,7 +421,7 @@ app.post('/webhook', async (req, res) => {
         const deliveryText = 
           '🚚 *ডেলিভারি, office ও কারখানা পলিসি:* 🏭\n\n' +
           '📍 *আমাদের প্রধান অফিস:* মানিকগঞ্জ।\n' +
-          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, लालबागकेलला, এবং বাংলাবাজার।\n\n' +
+          '🏭 *আমাদের প্রিন্টিং কারখানা:* ঢাকা ফকিরাপুল, লালবাগকেল্লা, এবং বাংলাবাজার।\n\n' +
           '📦 *সংগ্রহ করার নিয়ম:* কুরিয়ার সার্ভিসের মাধ্যমে দেশের যেকোনো প্রান্ত থেকে আপনি ক্যাশ অন ডেলিভারিতে প্রোডাক্ট নিতে পারবেন। এছাড়া সরাসরি মানিকগঞ্জ অফিস অথবা ঢাকার কারখানা থেকেও নিজে এসে সংগ্রহ করা সম্ভব। 🥰\n\n' +
           '⚠️ *বিশেষ শর্ত:* আমাদের কার্ডের ক্যাটাগরি ও ডিজাইন অনুযায়ী প্রিন্টিং কারখানা আলাদা হয়ে থাকে। তাই সরাসরি এসে সংগ্রহ করতে চাইলে, অর্ডার চূড়ান্ত হওয়ার পর আমাদের কাস্টমার সাপোর্ট টিম আপনাকে নির্দিষ্ট ফ্যাক্টরির লোকেশন কনফর্ম করে দেবে। ✨\n\n' +
           '🛍️ তাহলে ভাইয়া/আপু, আপনার পছন্দের ডিজাইনটি দিয়ে কি আজই অর্ডার বুক করে দেব? 🥰';
@@ -520,7 +528,10 @@ app.post('/webhook', async (req, res) => {
       const aiReply = await getGeminiReply(senderId, userText);
       state.history.push({ role: 'user', content: userText });
       state.history.push({ role: 'model', content: aiReply });
-      if (state.history.length > 10) state.history.shift();
+      
+      while (state.history.length > 10) {
+        state.history.shift();
+      }
 
       await sendVerticalMainMenu(senderId, aiReply);
       scheduleFollowUps(senderId);
@@ -540,4 +551,4 @@ app.get('/webhook', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('🚀 BOONDHON Multi-Defense Engine Patched and Running!'));
+app.listen(PORT, () => console.log('🚀 BOONDHON Engine Active with Fallback API Key!'));
