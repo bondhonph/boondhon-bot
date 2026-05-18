@@ -1,16 +1,13 @@
 require('dotenv').config();
 const express = require('express');
-const Groq = require('groq-sdk'); // Groq SDK ইমপোর্ট করা হলো
+const axios = require('axios');
 
 const app = express();
 app.use(express.json());
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "BOONDHON_SECRET_2025";
 const PAGE_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
-
-// Groq ক্লায়েন্ট ইনিশিয়ালাইজেশন
-const groq = new Groq({ apiKey: GROQ_API_KEY });
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY; // DeepSeek Key
 
 // ── Image IDs ──────────────────────────────────────────────
 const AFFORDABLE_IDS = [
@@ -123,9 +120,10 @@ function addToHistory(senderId, role, content) {
 
 // ── Trigger detection ──────────────────────────────────────
 function detectTrigger(text) {
+  if (!text) return null;
   const t = text.toLowerCase();
   const affordable = ["affordable", "অ্যাফোর্ডেবল", "সাশ্রয়", "কম দাম", "affordable card", "affodable", "এফোর্ডেবল"];
-  const premium = ["premium", "প্রিমিয়াম", "premium card", "প্রিমিয়ামカード", "প্রিমিয়াম কার্ড"];
+  const premium = ["premium", "প্রিমিয়াম", "premium card", "প্রিমিয়াম কার্ড"];
   const sale = [
     "অর্ডার কনফার্ম", "order confirm", "কনফার্ম করলাম", "নিব", "নেব",
     "advance দেব", "bkash দেব", "বিকাশ দেব", "অর্ডার দিতে চাই",
@@ -174,52 +172,56 @@ Customer "Affordable" বললে → reply-এ বলো: "এই মুহূ
 Customer "Premium" বললে → reply-এ বলো: "এই মুহূর্তে আপনাকে একটি নমুনা পাঠাচ্ছি ✨"
 Order confirm হলে → warmly congratulate করো এবং বলো টিম contact করবে`;
 
-// ── Groq AI call ───────────────────────────────────────────
+// ── DeepSeek AI call ───────────────────────────────────────
 async function getAIReply(senderId, userMessage) {
   try {
     const history = getHistory(senderId);
 
-    // অফিশিয়াল Groq SDK কল
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...history,
-        { role: 'user', content: userMessage }
-      ],
-      model: 'llama-3.3-70b-versatile', // আরও শক্তিশালী এবং আপ-টু-ডেট স্টেবল মডেল
-      max_tokens: 350,
-      temperature: 0.85,
-    });
+    const response = await axios.post(
+      'https://api.deepseek.com/v1/chat/completions',
+      {
+        model: 'deepseek-chat', // DeepSeek-V3/R1 ইন্টিগ্রেশন এন্ডপয়েন্ট
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          ...history,
+          { role: 'user', content: userMessage }
+        ],
+        max_tokens: 250,
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+        },
+        timeout: 12000
+      }
+    );
 
-    return chatCompletion.choices[0]?.message?.content || 'দুঃখিত, একটু সমস্যা হচ্ছে 😊';
+    return response.data?.choices?.[0]?.message?.content || 'বিয়ের কার্ডের কি কোনো নির্দিষ্ট বাজেট আছে আপনার? আমাকে জানাতে পারেন! 🌸';
   } catch (error) {
-    console.error("Groq API Call error:", error);
-    return 'দুঃখিত, একটু সমস্যা হচ্ছে 😊';
+    console.error('DeepSeek API Error:', error.response ? error.response.data : error.message);
+    return 'আমি আপনার মেসেজটি বুঝতে পেরেছি আপু/ভাইয়া। আমাদের কার্ডের কালেকশন দেখতে চাইলে "Affordable" বা "Premium" লিখে জানান! ✨';
   }
 }
 
 // ── Meta API helpers ───────────────────────────────────────
 async function sendText(recipientId, text) {
-  await fetch(
-    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        recipient: { id: recipientId },
-        message: { text }
-      })
-    }
-  );
+  try {
+    await axios.post(
+      `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
+      { recipient: { id: recipientId }, message: { text } }
+    );
+  } catch (err) {
+    console.error('Meta SendText Error:', err.message);
+  }
 }
 
 async function sendImage(recipientId, imageUrl) {
-  await fetch(
-    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+  try {
+    await axios.post(
+      `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
+      {
         recipient: { id: recipientId },
         message: {
           attachment: {
@@ -227,18 +229,18 @@ async function sendImage(recipientId, imageUrl) {
             payload: { url: imageUrl, is_reusable: true }
           }
         }
-      })
-    }
-  );
+      }
+    );
+  } catch (err) {
+    console.error('Meta SendImage Error:', err.message);
+  }
 }
 
 async function sendQuickReplies(recipientId, text, buttons) {
-  await fetch(
-    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+  try {
+    await axios.post(
+      `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
+      {
         recipient: { id: recipientId },
         message: {
           text,
@@ -248,9 +250,11 @@ async function sendQuickReplies(recipientId, text, buttons) {
             payload: b.toUpperCase().replace(/\s+/g, '_')
           }))
         }
-      })
-    }
-  );
+      }
+    );
+  } catch (err) {
+    console.error('Meta SendQuickReplies Error:', err.message);
+  }
 }
 
 // ── Webhook ────────────────────────────────────────────────
@@ -272,7 +276,7 @@ app.post('/webhook', async (req, res) => {
   if (body.object !== 'page') return;
 
   for (const entry of body.entry) {
-    const event = entry.messaging[0];
+    const event = entry.messaging?.[0];
     if (!event || !event.message || event.message.is_echo) continue;
 
     const senderId = event.sender.id;
@@ -294,18 +298,15 @@ app.post('/webhook', async (req, res) => {
         continue;
       }
 
-      // trigger detect
       const trigger = detectTrigger(userText);
-
-      // AI reply
       const aiReply = await getAIReply(senderId, userText);
+      
       addToHistory(senderId, 'user', userText);
       addToHistory(senderId, 'assistant', aiReply);
 
-      // text পাঠাও
       await sendText(senderId, aiReply);
 
-      // user trigger → image + follow-up
+      // user trigger handling
       if (trigger === 'affordable') {
         await sendImage(senderId, driveUrl(randomId(AFFORDABLE_IDS)));
         await sendText(senderId, '💚 এটি আমাদের Affordable collection-এর একটি নমুনা।\nআরও দেখতে চাইলে শুধু বলুন! 😊');
@@ -333,12 +334,12 @@ app.post('/webhook', async (req, res) => {
       }
 
     } catch (err) {
-      console.error('Error in webhook handling:', err);
+      console.error('Webhook processing loop error:', err);
     }
   }
 });
 
-app.get('/', (req, res) => res.send('🤖 BOONDHON Bot Running!'));
+app.get('/', (req, res) => res.send('🤖 BOONDHON Bot Running on DeepSeek!'));
 
-const PORT = process.env.PORT || 8080; // Railway পোর্টের সাথে সামঞ্জস্যপূর্ণ
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('✅ BOONDHON Bot Server Started on port ' + PORT));
