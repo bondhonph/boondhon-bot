@@ -1,10 +1,66 @@
-{
-  "name": "boondhon-bot",
-  "version": "1.0.0",
-  "scripts": { "start": "node server.js" },
-  "dependencies": {
-    "express": "^4.18.2",
-    "dotenv": "^16.3.1",
-    "body-parser": "^1.20.2"
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+const PAGE_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+
+// Webhook Verify
+app.get('/webhook', (req, res) => {
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+  if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+    res.status(200).send(challenge);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+// Message Receive
+app.post('/webhook', async (req, res) => {
+  const body = req.body;
+  if (body.object === 'page') {
+    body.entry.forEach(async entry => {
+      const event = entry.messaging[0];
+      const senderId = event.sender.id;
+      const messageText = event.message?.text;
+      if (messageText) {
+        await sendReply(senderId, getReply(messageText));
+      }
+    });
+  }
+  res.sendStatus(200);
+});
+
+// Auto Reply Logic
+function getReply(text) {
+  text = text.toLowerCase();
+  if (text.includes('দাম') || text.includes('price')) {
+    return '📋 আমাদের Price List:\n\n💰 Affordable Cards:\n৫০-১০০টি: ৫৫ টাকা/পিস\n১০১-২০০টি: ৪৫ টাকা/পিস\n\n💎 Premium Cards:\n৫০-১০০টি: ৬৫ টাকা/পিস\n১০১-২০০টি: ৫৫ টাকা/পিস';
+  } else if (text.includes('অর্ডার') || text.includes('order') || text.includes('কনফার্ম')) {
+    return '🎉 আপনার অর্ডারের জন্য ধন্যবাদ! আমাদের একজন expert শীঘ্রই যোগাযোগ করবেন। ⏰ সাধারণত ১৫-৩০ মিনিটের মধ্যে।';
+  } else if (text.includes('ডেলিভারি') || text.includes('delivery')) {
+    return '🚚 Delivery তথ্য:\n📍 মানিকগঞ্জ: ২-৩ কার্যদিবস\n📍 ঢাকা: ৩-৫ কার্যদিবস\n📍 সারা বাংলাদেশ: ৫-৭ কার্যদিবস';
+  } else {
+    return 'আস্সালামু আলাইকুম! 🌸 BOONDHON Printing House-এ স্বাগতম!\n\nআপনি কী জানতে চান?\n💰 দাম জানতে "দাম" লিখুন\n🚚 ডেলিভারি জানতে "ডেলিভারি" লিখুন\n✅ অর্ডার করতে "অর্ডার" লিখুন';
   }
 }
+
+// Send Reply Function
+async function sendReply(recipientId, message) {
+  await fetch(
+    `https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipient: { id: recipientId },
+        message: { text: message }
+      })
+    }
+  );
+}
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('Server চলছে!'));
