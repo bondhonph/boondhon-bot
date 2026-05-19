@@ -11,9 +11,8 @@ const AFFORDABLE_IDS = ["1J9_qfkIdIWL5Sc9O8EokvYlGfQWrf5TD","1cOCFSa1ap-Z54Ldf2A
 
 const PREMIUM_IDS = ["182kOjBhoaqOTq7nr4ryI6re6fRuLITbH","1cTfbTDJDqBjsV-r7V1OjBZ-Z6tUAqwxj","1cA-MfI55Hh7ibreMQ4zPvt2i_LKxVHkR","1fvtC5mT4slvV_kROIej7awAGmCRc7TUl","1rLVZUQ8lw6ilWM76xxARtbUreQ3JIkdi","15AQWI3wP2a57-3OxHZTCfSbskgvC5YvH","1ahoubjUVdc9SJyi5n2rzZIsbugjCjHiz","1qlwwRe2Mr_gb8CZjkeG0-YxBSGmOHzZu","1oOdGtYFTz-xNmSLUO-VFS1YODqYZ74HJ","1zBBLQOfuAaPXhyr6At3tJ5DlTZ_nXfLy","11GVK5OYU7bjf8YaHeNAAnAHPks3T1Jme","1Kat8i9M3usZX8iX2xUCcX08RVocX9kKB","1f327zMbxf9s_Z2WSYhA4cAIF_NBiveKW","1T_pxOh0mn36N882wUMyYSsXKoZE4w1XA","1OQqgPUW0j1C5Ggvh50oTnnw5VsgEQv5I","15FGsZ0xdZd7DYZb4awafD8ysH_8g-A9O","1KUI4gzdhT-1I_LpzCMCQL8Sgfy4dU_Im","1amD4c_CLTODq8nca3N_H40vPiYp53VTm","1j2a0DIwsKoXWomTJ9RuJm1RncFH3mbqg","1Cl0fyeCN4T4mUxt-mhEQe6z6ZzBXsQsK","1Tpq2cCmWEooN2SYUIEgq-elk6tRK_5tV","1wlnH6L9DQcYtHHRDtPmrLGz-u6bslOgl","1ZrP-OujlWQGLEln1u8YTa4e3kjQY0yzI","1U6HoCb65TnMZsfKmGQ9wujvvppKzD7HY","1pbevqRrVV2_aYSNSMF8q7jMqnDMGpAUn","1KTSwcHJmwu1XximtqvbgSnP4Zrskg8T_","1ZG7hoRZgcj5F_UMCidzJSI2yAYoiUAf6","1uMyZI2cVy_uABGNPNoe-pXul2pPPhC_U","1gITGc6TLsrSjYkdMhURcUUNQH1y1GFpc","1FTFe6klyuHyUBsOfLeN_QsZABlhF_I1U","1n9SD-SDFTJMuW-J_9g-Sg3Pi9u4Q8VqZ","1PiYBXyjmd0jMff_0j9miNPSKsH549oOJ","1emx-RKETN5UkoPSIM66I9V6z8g4O6eL0","1V9mGxsK3TFtLWGBnnfoQQ9tgnvmfOOKj","1zCSjLjQOnSeOechbnhxepJSKxbdE7MeI","1HarOxTDa8wdWYkAHdsYCUNp6-bdW-0aM","1zIdOBb-MSqAEHDPmc_cJluX8dtgx5fkk","1V1JnATj5BVIrnhdP7FleskNC0RElJ0NZ","1liH9X1gZehPc1nmNoPrBMysviH-_AC_0","1kS9lA4Rt0Ro1H4zWO_hNBzKPNvLkpb6G","1ML1TVAbIwOfV8g8V2jbFOnhupomDRuj5","15AnUgqE1IMBspLC7jCVveFXzNMVrvZUl","16pVMXGt2O5OW0GnEH0vK_J7beXJOVTFG","1x_Ykz9171lN4T5AJzBpbHlqvPyM-JuJ4","1qj1usLPAzfw8y74c-KKF6MfbE6F_txEJ","1oUNXIOVWfaYe_O1s0AZP7WZbz9PkJdER","1lKmVy2Xgs27j5IW6CzbzYYHzIPpPB7pF","10R18Piu79JTBPmWu7l1q_ht5yRddjZj_","1C3AXVh-mfTMtcAFhrL044TvwklDIKYNa","1fZQ7kc9OkcDLMntUqUnUh-eVfGPqfIm","1Zb-AwPI5Ta8GaDX8T2QSMesenxFBEpNw","181vyiexE1YGUOav2BUEdLzWLn24qdvvm","1IUCMZwe292HN-OEcdnIbvWPuwGy6bgBG","1zyZ3QVHsOkTBADMm8jxJrk2ZIiiFE87F","1vtMWO4Ah45nvFExeMq82sfZc2JRsIiHc","1S0Oefe3t9iTNkhY_kjNojyHbb7uY4qHE","1rDFVMBfbrEt76kjiJLES3bnA_jmedsyI","119JxcFfIzDClqpTEC7ekWEMEPzH4_Hth","18roPGwQh8ImnrZ3ncIe8dt69JtUqrmwQ","147CRb0HLsfBA8aw9BNdO6dco7dQF6xNo","1oBnPqo8kAxNk4D3cgxlJAaZGqmP5F2Mb","1NVkZtKt1EHXcCA0c_latgAtBdckWGi6t","1EZIR0WmtoYLGcR-mUebaCHYYCL9NNykR","1zwQdkQRZVqXLvhRmHeuqNj3OtwFZ5xer","1p0cWNTy_cCV8_yrV3RuPp94stsaH8ZRm","1ntMdF0lJquZtJTYKc3t4WWGU-00DiYaM","1L1RhTUFgN2ziAWpKaRwlZipkjehPXnWZ","1jgARDI1JIjh_4qRUbvdpG1p0RBp4if7b","1TGZcnR1aYmln_E_UxgD_uInfREnRXf9T","1OKX94fxZ1BXqvDYY8SCQ22gR6Db2op2y","1J2_PY_Rk-x5ipzl_Ur5unrWCx2ZN7LvR","184YPeKcI8ilthW2VPvTcnJSTebj335-c","1-7lrprKPJQ-JuiNVi_bUdzHr_7S0NmNn","1ZAk92jKEyUhpO_faXYdbz5PPXkmo5YQN","1_9oor-2oJ4dHHOBkERAije6pvr8zAqPJ","1MX7rnQG2F0H8UX5ofGazO53knl7SUNE1","148EhK2GqvlP8Z-X-pK4Cp-Zb_sXqBLAu","1EuLjjvKMWIMkgbnK5PKOsKC5kG5H11"];
 
-// 💯 FIXED: Template Literal Corrected to load images perfectly in Messenger
 function driveUrl(id) {
-  return `https://lh3.googleusercontent.com/d/$${id}`;
+  return `http://googleusercontent.com/profile/picture/${id}`;
 }
 
 const userStates = {};
@@ -36,7 +35,7 @@ function scheduleFollowUps(senderId) {
   const state = getUserState(senderId);
   clearFollowUps(state);
   const intervals = [
-    { time: 60*60*1000, msg: "Hi ভাইয়া/আপু! 😊 আপনার ওয়েডিংカードের অর্ডারটি কি কনফার্ম করব? আমাদের স্টক সীমিত! 🛍️" },
+    { time: 60*60*1000, msg: "Hi ভাইয়া/আপু! 😊 আপনার ওয়েডিং কার্ডের অর্ডারটি কি কনফার্ম করব? আমাদের স্টক সীমিত! 🛍️" },
     { time: 2*60*60*1000, msg: "কোনো ডিজাইন পছন্দ হয়েছে আপু/ভাইয়া? 💖 কাস্টমাইজেশন লাগলে জানাবেন! ✨" },
     { time: 6*60*60*1000, msg: "শুভ দিন! 🌸 আজই অর্ডার কনফার্ম করলে দ্রুত ডেলিভারি পাবেন! 🥰" },
     { time: 24*60*60*1000, msg: "আসসালামু আলাইকুম! 💌 যোগাযোগের জন্য ধন্যবাদ। কোনো হেল্প লাগলে জানাবেন! 🙏❤️" }
@@ -49,20 +48,37 @@ function scheduleFollowUps(senderId) {
   });
 }
 
-// ⚡ OPTIMIZED: Flexible typing delay without sync blocking
-async function sendTypingIndicator(recipientId, action = "typing_on") {
+async function sendTyping(recipientId, state = "typing_on") {
   try {
     await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ recipient: { id: recipientId }, sender_action: action })
+      body: JSON.stringify({ recipient: { id: recipientId }, sender_action: state })
     });
-  } catch (e) { console.error('Typing error:', e); }
+  } catch (e) { console.error('Typing indicator error:', e); }
 }
 
-async function sendMsg(recipientId, text, delayMs = 1200) {
-  await sendTypingIndicator(recipientId, "typing_on");
-  await new Promise(r => setTimeout(r, delayMs));
-  await sendTypingIndicator(recipientId, "typing_off");
+// 💯 FIXED: Postback Payload explicitly added for instant detection
+function detectTrigger(text) {
+  if (!text) return null;
+  const t = text.toLowerCase().trim();
+  
+  if (["অর্ডার কনফার্ম","order confirm","কনফার্ম করলাম","নিব","নেব","অর্ডার করব","অর্ডার দিতে চাই","কনফার্ম","order krbo","order kivabe","এখনই অর্ডার করুন","sale"].some(w => t.includes(w))) return "sale";
+  if (["দামী","অনেক দাম","রাখেন","নিব না","expensive","বেশি দাম","কম রাখেন","বাজেট নাই","ডিসকাউন্ট","ছাড় দেন"].some(w => t.includes(w))) return "price_objection";
+  if (["stop_images","🙅","না আর দিও না","আর লাগবে না"].some(w => t.includes(w))) return "stop_images";
+  if (["continue_images","👍 হ্যাঁ","বাকিগুলো দাও","বাকি ডিজাইন"].some(w => t.includes(w))) return "continue_images";
+  if (["affordable","অ্যাফোর্ডেবল","সাশ্রয়","কম দাম","affordable কালেকশন"].some(w => t.includes(w))) return "affordable";
+  if (["premium","প্রিমিয়াম","premium কালেকশন"].some(w => t.includes(w))) return "premium";
+  if (["দাম","প্রাইস","price","কত টাকা","কত","অফার","দাম ও অফার","দাম ও স্পেশাল অফার"].some(w => t.includes(w))) return "price";
+  if (["ডেলিভারি","কারখানা","delivery","অফিস","ঠিকানা","পলিসি","কারখানা ও ডেলিভারি","পলিসি ও ঠিকানা"].some(w => t.includes(w))) return "delivery";
+  if (["বাংলা","bangla","বাংলা ফর্ম","🇧🇩","bangla_form"].some(w => t.includes(w))) return "bangla_form";
+  if (["english","ইংরেজি","🇬🇧","english_form"].some(w => t.includes(w))) return "english_form";
+  return null;
+}
+
+async function sendMsg(recipientId, text) {
+  await sendTyping(recipientId, "typing_on");
+  await new Promise(r => setTimeout(r, 1000));
+  await sendTyping(recipientId, "typing_off");
   
   await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -70,35 +86,16 @@ async function sendMsg(recipientId, text, delayMs = 1200) {
   });
 }
 
-function detectTrigger(text) {
-  if (!text) return null;
-  const t = text.toLowerCase();
-  if (["অর্ডার কনফার্ম","order confirm","কনফার্ম করলাম","নিব","নেব","অর্ডার করব","অর্ডার দিতে চাই","কনফার্ম","order krbo","order kivabe","এখনই অর্ডার করুন","sale"].some(w => t.includes(w))) return "sale";
-  if (["দামী","অনেক দাম","রাখেন","নিব না","expensive","বেশি দাম","কম রাখেন","বাজেট নাই","ডিসকাউন্ট","ছাড় দেন"].some(w => t.includes(w))) return "price_objection";
-  if (["stop_images","🙅","না আর দিও না","আর লাগবে না"].some(w => t.includes(w))) return "stop_images";
-  if (["continue_images","👍 হ্যাঁ","বাকিগুলো দাও","বাকি ডিজাইন"].some(w => t.includes(w))) return "continue_images";
-  if (["affordable","অ্যাফোর্ডেবল","সাশ্রয়","কম দাম"].some(w => t.includes(w))) return "affordable";
-  if (["premium","প্রিমিয়াম"].some(w => t.includes(w))) return "premium";
-  if (["দাম","প্রাইস","price","কত টাকা","কত","অফার"].some(w => t.includes(w))) return "price";
-  if (["ডেলিভারি","কারখানা","delivery","অফিস","ঠিকানা","পলিসি"].some(w => t.includes(w))) return "delivery";
-  if (["বাংলা","bangla","বাংলা ফর্ম","🇧🇩","bangla_form"].some(w => t.includes(w))) return "bangla_form";
-  if (["english","ইংরেজি","🇬🇧","english_form"].some(w => t.includes(w))) return "english_form";
-  return null;
-}
-
 async function sendMainMenu(recipientId, mainText) {
   try {
     if (mainText) {
-      await sendMsg(recipientId, mainText, 1000);
+      await sendMsg(recipientId, mainText);
     }
-    await sendTypingIndicator(recipientId, "typing_on");
-    await new Promise(r => setTimeout(r, 500));
-    
     await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ recipient: { id: recipientId }, message: { attachment: { type: "template", payload: { template_type: "button", text: "👇 নিচের অপশনগুলো সিলেক্ট করুন:", buttons: [
         { type: "postback", title: "🌸 Affordable কার্ড", payload: "affordable" },
-        { type: "postback", title: "✨ Premium কার্ড", payload: "premium" },
+        { type: "postback", title: "✨ Premium  কার্ড", payload: "premium" },
         { type: "postback", title: "💰 দাম ও অফার", payload: "price" }
       ] } } } })
     });
@@ -124,7 +121,7 @@ async function sendImagesStream(senderId, startIndex = 0) {
         body: JSON.stringify({ recipient: { id: senderId }, message: { attachment: { type: 'image', payload: { url: driveUrl(ids[i]), is_reusable: true } } } })
       });
     } catch (e) { console.error('Image error:', e); }
-    await new Promise(r => setTimeout(r, 950));
+    await new Promise(r => setTimeout(r, 1000));
     if (!state.isSendingImages) { state.lastImageIndex = i + 1; return; }
   }
   state.isSendingImages = false;
@@ -137,16 +134,16 @@ async function getGeminiReply(senderId, userMessage) {
   contents.push({ role: 'user', parts: [{ text: userMessage }] });
   
   const systemText =
-    "তুমি BOONDHON Printing House-এর AI Sales Agent 'Brishti Apa'।\n" +
+    "তুমি BOONDHON Printing House-এর AI Sales Agent 'Brishti Apa'.\n" +
     "টোন: অত্যন্ত মিষ্টি, আন্তরিক ও সেলস ক্লোজিংমুখী। প্রচুর ইমোজি ব্যবহার করবে।\n" +
-    "প্রাইস লজিক: ৫০পিস Affordable=২৭৫০, Premium=৩২৫০। ১০০পিস Affordable=৪৫০০, Premium=৫৫০০। ২০০পিস Affordable=৭০০০, Premium=৯০০০।\n" +
-    "২০০+ পিসে FREE ডিজিটাল আকদনামা/নিকাহনামা অফার পুশ করবে।\n" +
-    "দাম আপত্তি: প্রথমবার ও দ্বিতীয়বার quality ও মেটেরিয়ালস বুঝিয়ে বলো। ৩বার আপত্তিতে ৫ টাকা স্পেশাল ডিসকাউন্ট অফার করবে।\n" +
-    "২০ পিস সিক্রেট: খুব জোর করলে বলবে ২০পিস=১৫০০ টাকা। এর নিচে করা সম্ভব না।\n" +
-    "হটলাইন: 01701016826 (WhatsApp)।\n" +
-    "কখনো নিজেকে AI বা বট বলবে না। পুরো মানুষের মতো রিয়েল অনুভূতি প্রকাশ করে বাংলায় কথা বলবে।\n" +
-    "Customer বাটন ছাড়া যাই বলুক না কেন, তার কথা গভীর মনোযোগ দিয়ে অ্যানালাইসিস করে প্রফেশনাল এবং ফ্রেন্ডলি উত্তর দাও।";
-
+    "প্রাইস: ৫০পিস Affordable=২৭৫০, Premium=৩২৫০। ১০০পিস Affordable=৪৫০০, Premium=৫৫০০। ২০০পিস Affordable=৭০০০, Premium=৯০০০.\n" +
+    "২০০+ পিসে FREE নিকাহনামা.\n" +
+    "দাম আপত্তি: প্রথমবার quality বলো। ৩বার আপত্তিতে ৫ টাকা ডিসকাউন্ট.\n" +
+    "২০ পিস সিক্রেট: জোর করলে বলবে ২০পিস=১৫০০ টাকা.\n" +
+    "হটলাইন: 01701016826 (WhatsApp).\n" +
+    "কখনো AI বলবে না। বাংলায় কথা বলবে.\n" +
+    "Customer যাই বলুক বুঝে মানুষের মতো মিষ্টি করে reply দাও।";
+    
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -155,7 +152,7 @@ async function getGeminiReply(senderId, userMessage) {
     const data = await response.json();
     return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'জি ভাইয়া/আপু! 🥰 কীভাবে সাহায্য করতে পারি?';
   } catch (err) {
-    return 'জি প্রিয় ভাইয়া/আপু! 🥰 কীভাবে সাহায্য করতে পারি বলুন? ✨';
+    return 'জি প্রিয় ভাইয়া/আপু! 🥰 নিচের মেনু থেকে সিলেক্ট করুন। ✨';
   }
 }
 
@@ -180,6 +177,7 @@ app.post('/webhook', async (req, res) => {
 
     const trigger = detectTrigger(userText);
 
+    // 💯 FIXED: Added return/continue on all blocks to stop loop collisions
     if (trigger) {
       state.isSendingImages = false;
 
@@ -192,38 +190,38 @@ app.post('/webhook', async (req, res) => {
       }
       if (trigger === 'affordable') {
         state.imageType = 'affordable'; state.lastImageIndex = 0;
-        await sendMsg(senderId, "🌸 Affordable কালেকশনের ডিজাইনগুলো পাঠানো হচ্ছে... 👇", 1000);
+        await sendMsg(senderId, "🌸 Affordable কালেকশনের ডিজাইনগুলো পাঠানো হচ্ছে... 👇");
         await sendImagesStream(senderId, 0); continue;
       }
       if (trigger === 'premium') {
         state.imageType = 'premium'; state.lastImageIndex = 0;
-        await sendMsg(senderId, "✨ Premium কালেকশনের ডিজাইনগুলো পাঠানো হচ্ছে... 👇", 1000);
+        await sendMsg(senderId, "✨ Premium কালেকশনের ডিজাইনগুলো পাঠানো হচ্ছে... 👇");
         await sendImagesStream(senderId, 0); continue;
       }
       if (trigger === 'price') {
         await sendMainMenu(senderId,
           '💰 *BOONDHON বিয়ের কার্ডের প্রাইস লিস্ট:* 🌸\n\n' +
-          '• *৫০ পিস:* Premium = ৩,২৫০৳ | Affordable = ২,৭৫০৳\n' +
-          '• *১০০ পিস:* Premium = ৫,৫০০৳ | Affordable = ৪,৫০০৳\n' +
-          '• *২০০ পিস:* Premium = ৯,০০০৳ | Affordable = ৭,০০০৳\n\n' +
-          '🎁 *ধামাকা অফার:* ২০০+ পিসে পাচ্ছেন আকর্ষণীয় ডিজিটাল আকদনামা একদম *FREE*! 🥰\n\n' +
-          'আপনার কত পিস লাগবে ভাইয়া/আপু? আজই অর্ডার কনফার্ম করুন! ✨'
+          '৫০ পিস: Premium=৩,২৫০৳ | Affordable=২,৭৫০৳\n' +
+          '১০০ পিস: Premium=৫,৫০০৳ | Affordable=৪,৫০০৳\n' +
+          '২০০ পিস: Premium=৯,০০০৳ | Affordable=৭,০০০৳\n\n' +
+          '🎁 ২০০+ পিসে FREE নিকাহনামা! 🥰\n\n' +
+          'কত পিস লাগবে? আজই অর্ডার করুন! ✨'
         );
         scheduleFollowUps(senderId); continue;
       }
       if (trigger === 'delivery') {
         await sendMainMenu(senderId,
-          '🚚 *ডেলিভারি ও পলিসি:* 🏭\n\n' +
-          '📍 *প্রধান অফিস:* Manikganj\n' +
-          '🏭 *কারখানা:* ফকিরাপুল, লালবাগকেল্লা, বাংলাবাজার, বাবুবাজার (ঢাকা)।\n\n' +
-          '📋 *অর্ডারের নিয়ম:* \n' +
-          '১. মোট বিলের ৩০% অ্যাডভান্স করতে হবে।\n' +
-          '   বিকাশ/নগদ/রকেট (পার্সোনাল): *01682588856*\n' +
-          '২. ডেমো ডিজাইন মেক করে আপনাকে দেখানোর পর আপনি Approve করলেই print শুরু হবে।\n' +
-          '৩. জেলা শহরে কুরিয়ারের মাধ্যমে ক্যাশ অন ডেলিভারি (বাকি ৭০% টাকা নেওয়ার সময় দেবেন)।\n' +
-          '৪. ৫-৭ কর্মদিবসের মধ্যে ডেলিভারি পেয়ে যাবেন। 🥰\n\n' +
-          '⚠️ সরাসরি কারখানা থেকে সংগ্রহ করতে চাইলে অবশ্যই আগে কনফার্ম করে ঠিকানা জেনে নেবেন।\n' +
-          '📞 *হটলাইন:* 01701016826 (WhatsApp)'
+          '🚚 *ডেলিভারি ও পলিসি:*\n\n' +
+          '📍 অফিস: Manikganj\n' +
+          '🏭 কারখানা: ফকিরাপুল, লালবাগকেল্লা, বাংলাবাজার, বাবুবাজার\n\n' +
+          '📋 অর্ডারের নিয়ম:\n' +
+          '১. মোট বিলের ৩০% অ্যাডভান্স\n' +
+          '   বিকাশ/নগদ/রকেট: 01682588856\n' +
+          '২. ডেমো ডিজাইন approve করার পর print\n' +
+          '৩. জেলা শহরে ক্যাশ অন ডেলিভারি\n' +
+          '৪. ৫-৭ কর্মদিবসে ডেলিভারি\n\n' +
+          '⚠️ কারখানা থেকে নিলে আগে ঠিকানা নিশ্চিত করুন\n' +
+          '📞 হটলাইন: 01701016826 (WhatsApp)'
         );
         scheduleFollowUps(senderId); continue;
       }
@@ -234,20 +232,18 @@ app.post('/webhook', async (req, res) => {
           await sendMainMenu(senderId, reply);
         } else if (state.priceObjectionCount >= 3 && !state.hasOfferedDiscount) {
           state.hasOfferedDiscount = true;
-          await sendMainMenu(senderId, '🌸 শুধুমাত্র আপনার জন্য স্পেশাল পারমিশন নিলাম ভাইয়া/আপু! 🥰\nপ্রতি পিসে ৫ টাকা স্পেশাল ডিসকাউন্ট দেওয়া যাবে! 🥳\nএখনই কি অর্ডারটি ফাইনাল করে দেব? 🛍️');
+          await sendMainMenu(senderId, '🌸 শুধুমাত্র আপনার জন্য স্পেশাল পারমিশন! 🥰\nপ্রতি পিসে ৫ টাকা ডিসকাউন্ট! 🥳\nএখনই অর্ডার করবেন? 🛍️');
         } else {
-          await sendMainMenu(senderId, "আহারে ভাইয়া/আপু! 😭 মেটেরিয়ালস খরচ বেশি হওয়ায় এর চেয়ে কম করলে আমাদের লস হয়ে যাবে। যোগাযোগের জন্য ধন্যবাদ! 🙏❤️");
+          await sendMainMenu(senderId, "আহারে! 😭 এর চেয়ে কম করলে আমাদের লস হবে। ধন্যবাদ! 🙏❤️");
         }
         scheduleFollowUps(senderId); continue;
       }
       if (trigger === 'sale') {
         try {
-          await sendTypingIndicator(senderId, "typing_on");
-          await new Promise(r => setTimeout(r, 800));
           await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ recipient: { id: senderId }, message: { attachment: { type: "template", payload: { template_type: "button",
-              text: '🎉 অসাধারণ সিদ্ধান্ত ভাইয়া/আপু! 🌸\n\n📋 *অর্ডারের নিয়মাবলী:* \n\n১. 💰 মোট বিলের ৩০% অ্যাডভান্স পেমেন্ট করতে হবে।\n   বিকাশ/নগদ/রকেট: *01682588856*\n\n২. 🎨 পেমেন্টের পর ডেমো ডিজাইন মেক করে দেখানো হবে, approve করার পরই print শুরু হবে।\n\n৩. 🚚 ৫-৭ কর্মদিবসে ডেলিভারি। বাকি ৭০% ক্যাশ অন ডেলিভারি।\n\n👇 নিচে থেকে আপনার কার্ডের কাঙ্ক্ষিত ভাষা সিলেক্ট করুন:',
+              text: '🎉 অসাধারণ সিদ্ধান্ত ভাইয়া/আপু! 🌸\n\n📋 অর্ডারের নিয়ম:\n\n১. 💰 মোট বিলের ৩০% অ্যাডভান্স\n   বিকাশ/নগদ/রকেট: 01682588856\n\n২. 🎨 পেমেন্টের পর ডেমো ডিজাইন\n   approve করার পরই print শুরু\n\n৩. 🚚 ৫-৭ কর্মদিবসে ডেলিভারি\n   বাকি ৭০% ক্যাশ অন ডেলিভারি\n\n👇 কার্ডের ভাষা সিলেক্ট করুন:',
               buttons: [
                 { type: "postback", title: "🇧🇩 বাংলায় ইনফো ফর্ম", payload: "bangla_form" },
                 { type: "postback", title: "🇬🇧 English Form", payload: "english_form" }
@@ -263,16 +259,16 @@ app.post('/webhook', async (req, res) => {
           '📝 *বিয়ের কার্ডের বাংলা ফর্ম:* 🌸\n\n' +
           'বর-\nনামঃ\nপিতাঃ\nমাতাঃ\nঠিকানাঃ\n\n' +
           'কণে-\nনামঃ\nপিতাঃ\nমাতাঃ\nঠিকানাঃ\n\n' +
-          'গায়ে হলুদ-\nতারিখ (ইংরেজি):\nতারিখ (বাংলা):\nরোজঃ\nसमयঃ\nস্থানঃ\n\n' +
-          'শুভ বিবাহ-\nতারিখ (ইংরেজি):\nতারিখ (বাংলা):\nরোজঃ\nলগ্ন (শুধু হিন্দুদের):\nবরযাত্রা/সময়ঃ\nস্থানঃ\n\n' +
-          'বৌ-ভাত-\nতারিখ (ইংরেজি):\nতারিখ (বাংলা):\nরোজঃ\nसमयঃ\nস্থানঃ\n\n' +
+          'গায়ে হলুদ-\nতারিখ (ইংরেজি):\nতারিখ (বাংলা):\nরোজঃ\nসময়ঃ\nস্থানঃ\n\n' +
+          'শুভ বিবাহ-\nতারিখ (ইংরেজি):\nতারিখ (বাংলা):\nরোজঃ\nলগ্ন (শুধু হিন্দুদের):\nবরযাত্রা/সময়ঃ\nস্থানঃ\n\n' +
+          'বৌ-ভাত-\nতারিখ (ইংরেজি):\nতারিখ (বাংলা):\nরোজঃ\nসময়ঃ\nস্থানঃ\n\n' +
           'অভ্যর্থনায়-\n(ছোট বাচ্চাদের নাম):\n\n' +
-          'প্রয়োজনে (ফোন):\nশুভেচ্ছান্তে নামঃ\n\n' +
+          'প্রয়োজনে (ফোন):\nশুভেচ্ছান্তে নামঃ\n\n' +
           '-------\n' +
-          '❓ বর ও কণে পিতামাতার কততম সন্তান?\n' +
-          '❓ কার্ডটি ছেলের পক্ষ নাকি মেয়ের পক্ষ?\n\n' +
-          '🚚 কুরিয়ার ইনফো (নাম, মোবাইল, ঠিকানা):\n\n' +
-          '_(নোট: ফর্মটি সুন্দরভাবে কপি করে পূরণ করে আমাদের পাঠিয়ে দিন! 🥰)_', 1800
+          'বর ও কণে পিতামাতার কততম সন্তান?\n' +
+          'কার্ডটি ছেলের পক্ষ নাকি মেয়ের পক্ষ?\n\n' +
+          '🚚 কুরিয়ার ইনফো (নাম, মোবাইল, ঠিকানা):\n\n' +
+          'ফর্মটি কপি করে পূরণ করে পাঠান! 🥰'
         );
         scheduleFollowUps(senderId); continue;
       }
@@ -281,18 +277,18 @@ app.post('/webhook', async (req, res) => {
           '📝 *Wedding Card English Form:* ✨\n\n' +
           'Groom Name:\nFather Name:\nMother Name:\n\n' +
           'Bride Name:\nFather Name:\nMother Name:\n\n' +
-          '• Holud Sandya\nDay: | Date: | Time:\nVenue: | Address:\n\n' +
-          '• Wedding\nDay: | Date: | Time:\nVenue: | Address:\n\n' +
-          '• Reception\nDay: | Date: | Time:\nVenue: | Address:\n\n' +
+          'Holud Sandya\nDay:\nDate:\nTime:\nVenue:\nAddress:\n\n' +
+          'Wedding\nDay:\nDate:\nTime:\nVenue:\nAddress:\n\n' +
+          'Reception\nDay:\nDate:\nTime:\nVenue:\nAddress:\n\n' +
           'With Best Regard - Name:\nRSVP Number:\n\n' +
           '🚚 Courier Info (Name, Mobile, Address):\n\n' +
-          '_(Note: Please copy, fill up and send it back to lock your order now! 🥰)_', 1800
+          'Copy, fill up and send back! 🥰'
         );
         scheduleFollowUps(senderId); continue;
       }
     }
 
-    // ── 📸 Handling Stream Interruptions naturally ──
+    // ── 📸 ইমেজের মাঝে কাস্টমার মেসেজ দিলে তা থামানোর লজিক ──
     if (state.isSendingImages) {
       state.isSendingImages = false;
       const aiReply = await getGeminiReply(senderId, userText);
@@ -300,7 +296,7 @@ app.post('/webhook', async (req, res) => {
         await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${PAGE_TOKEN}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ recipient: { id: senderId }, message: { attachment: { type: "template", payload: { template_type: "button",
-            text: `${aiReply}\n\n💖 বাকি ডিজাইনগুলো কি এখন পাঠাব ভাইয়া/আপু?`,
+            text: `${aiReply}\n\n💖 বাকি ডিজাইনগুলো দেখবেন?`,
             buttons: [
               { type: "postback", title: "👍 হ্যাঁ, বাকিগুলো দাও", payload: "continue_images" },
               { type: "postback", title: "🙅 না, আর লাগবে না", payload: "stop_images" }
@@ -311,24 +307,17 @@ app.post('/webhook', async (req, res) => {
       continue;
     }
 
-    // ── 🧠 SMART CHAT LOGIC (💯 FIXED: CUSTOMER JAI BOLUK, TEXT ANALYSIS REPLY) ──
-    // কাস্টমার বাটন ছাড়া সাধারণ টেক্সট লিখলে জেমিনি তার মুড বুঝে পিওর টেক্সট মেসেজে দারুণ মানুষের মতো উত্তর দেবে।
-    const aiReply = await getGeminiReply(senderId, userText);
-    state.history.push({ role: 'user', content: userText });
-    state.history.push({ role: 'model', content: aiReply });
-    while (state.history.length > 10) state.history.shift();
-    
-    // একদম ক্লিন এবং ন্যাচারাল টেক্সট রিপ্লাই, কোনো এক্সট্রা বাটন প্যানেল পুশ হবে না!
-    await sendMsg(senderId, aiReply, userText.length > 30 ? 1800 : 1200);
-    scheduleFollowUps(senderId);
-  }
-});
-
-app.get('/webhook', (req, res) => {
-  if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
-    res.status(200).send(req.query['hub.challenge']);
-  } else { res.sendStatus(403); }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('🚀 BOONDHON Smart Engine Fully Stabilized!'));
+    // ── 🧠 গুগল শিট ডাটা ক্যাচিং লজিক (ফ্রি ফিচার) ──
+    if (userText.includes('নামঃ') || userText.includes('Name:')) {
+      const sheetUrl = process.env.GOOGLE_SHEET_WEBAPP_URL;
+      if (sheetUrl) {
+        try {
+          await fetch(sheetUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ senderId: senderId, formType: userText.includes('নামঃ') ? 'Bangla Form' : 'English Form', formData: userText })
+          });
+          await sendMsg(senderId, "🎉 অনেক ধন্যবাদ ভাইয়া/আপু! আপনার ইনফো ফর্মটি আমাদের কাছে জমা হয়েছে। পেমেন্ট ভেরিফাই করে আমাদের টিম দ্রুত আপনার সাথে ডেমো ডিজাইন নিয়ে যোগাযোগ করবে। 🌸");
+          scheduleFollowUps(senderId);
+          continue;
+        } catch (err) { console
